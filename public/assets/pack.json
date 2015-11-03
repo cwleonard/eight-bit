@@ -3,7 +3,7 @@
         {
             "type": "image",
             "key": "tiles",
-            "url": "assets/images/nestle.png"
+            "url": "assets/images/nestle2.png"
         },
         {
             "type": "spritesheet",
@@ -14,10 +14,11 @@
         },
         {
             "type": "tilemap",
-            "key": "map",
-            "url": "assets/ground.json",
+            "key": "stage1",
+            "url": "assets/stage1.json",
             "data": null,
             "format": "TILED_JSON"
         }
+        
     ]
 }

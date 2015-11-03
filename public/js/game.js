@@ -25,14 +25,14 @@ var init = function () {
 
 	    game.physics.startSystem(Phaser.Physics.ARCADE);
 	    
-	    game.physics.arcade.gravity.y = 500;
+	    game.physics.arcade.gravity.y = 1500;
 	    
 		game.stage.backgroundColor = "#D3EEFF";
 		
-		var map = game.add.tilemap("map");
-		map.addTilesetImage("nestle", "tiles");
+		var map = game.add.tilemap("stage1");
+		map.addTilesetImage("ground", "tiles");
 		
-		map.setCollisionBetween(0, 12832);
+		map.setCollisionBetween(0, 6569);
 		
 		layer = map.createLayer("layer1");
 		layer.resizeWorld();
@@ -56,14 +56,14 @@ var init = function () {
 
 	    if (spacebar.isDown) {
 	        if (frog.body.onFloor()) {
-	            frog.body.velocity.y = -250;
+	            frog.body.velocity.y = -600;
 	        }
 	    }
 
 	    if (cursors.left.isDown) {
-	        frog.body.velocity.x = -100;
+	        frog.body.velocity.x = -150;
 	    } else if (cursors.right.isDown) {
-	        frog.body.velocity.x = 100;
+	        frog.body.velocity.x = 150;
 	    }
 
 	    setAnimation(frog);
