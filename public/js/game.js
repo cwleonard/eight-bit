@@ -50,25 +50,25 @@ var init = function () {
 
 	function update() {
 
-	    game.physics.arcade.collide(frog, layer);
+        game.physics.arcade.collide(frog, layer);
 
-	    frog.body.velocity.x = 0;
+        frog.body.velocity.x = 0;
 
-	    if (spacebar.isDown) {
-	        if (frog.body.onFloor()) {
-	            frog.body.velocity.y = -600;
-	        }
-	    }
+        if (spacebar.isDown) {
+            if (frog.body.onFloor()) {
+                frog.body.velocity.y = -600;
+            }
+        }
 
-	    if (cursors.left.isDown) {
-	        frog.body.velocity.x = -150;
-	    } else if (cursors.right.isDown) {
-	        frog.body.velocity.x = 150;
-	    }
+        if (cursors.left.isDown) {
+            frog.body.velocity.x = -150;
+        } else if (cursors.right.isDown) {
+            frog.body.velocity.x = 150;
+        }
 
-	    setAnimation(frog);
+        setAnimation(frog);
 
-	}
+    }
 	
 	/**
 	 * Creates a frog.
