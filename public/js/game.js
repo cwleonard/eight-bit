@@ -21,31 +21,37 @@ var init = function () {
 		
 	}
 	
+
 	function create() {
 
-	    game.physics.startSystem(Phaser.Physics.ARCADE);
-	    
-	    game.physics.arcade.gravity.y = 1500;
-	    
-		game.stage.backgroundColor = "#D3EEFF";
-		
-		var map = game.add.tilemap("stage1");
-		map.addTilesetImage("ground", "tiles");
-		
-		map.setCollisionBetween(0, 6569);
-		
-		layer = map.createLayer("layer1");
-		layer.resizeWorld();
-		
-		group = game.add.group();
-		
+        game.physics.startSystem(Phaser.Physics.ARCADE);
+
+        game.physics.arcade.gravity.y = 1500;
+
+        game.stage.backgroundColor = "#D3EEFF";
+
+        var map = game.add.tilemap("stage1");
+        map.addTilesetImage("ground", "tiles");
+
+        var bglayer = map.createLayer("bg");
+        bglayer.scrollFactorX = 0.5;
+
+        layer = map.createLayer("layer1");
+        layer.resizeWorld();
+
+        map.setLayer(layer);
+
+        map.setCollisionBetween(0, 6569);
+
+        group = game.add.group();
+
         frog = createFrog(group, 50, 50, "frog", 200, "left");
-        
+
         game.camera.follow(frog);
-        
-		cursors = game.input.keyboard.createCursorKeys();
-		spacebar = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
-		
+
+        cursors = game.input.keyboard.createCursorKeys();
+        spacebar = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
+
 	}
 
 	function update() {
