@@ -22,37 +22,97 @@ var init = function () {
 	}
 	
 
-	function create() {
-
+    function setTileCollision(mapLayer, idxOrArray, dirs) {
+    
+        var mFunc; // tile index matching function
+        if (idxOrArray.length) {
+            // if idxOrArray is an array, use a function with a loop
+            mFunc = function(inp) {
+                for (var i = 0; i < idxOrArray.length; i++) {
+                    if (idxOrArray[i] === inp) {
+                        return true;
+                    }
+                }
+                return false;
+            };
+        } else {
+            // if idxOrArray is a single number, use a simple function
+            mFunc = function(inp) {
+                return inp === idxOrArray;
+            };
+        }
+    
+        // get the 2-dimensional tiles array for this layer
+        var d = mapLayer.map.layers[mapLayer.index].data;
+        
+        for (var i = 0; i < d.length; i++) {
+            for (var j = 0; j < d[i].length; j++) {
+                var t = d[i][j];
+                if (mFunc(t.index)) {
+                    
+                    t.collideUp = dirs.top;
+                    t.collideDown = dirs.bottom;
+                    t.collideLeft = dirs.left;
+                    t.collideRight = dirs.right;
+                    
+                    t.faceTop = dirs.top;
+                    t.faceBottom = dirs.bottom;
+                    t.faceLeft = dirs.left;
+                    t.faceRight = dirs.right;
+                    
+                }
+            }
+        }
+    
+    }
+	
+    function create() {
+    
         game.physics.startSystem(Phaser.Physics.ARCADE);
-
+    
         game.physics.arcade.gravity.y = 1500;
-
+    
         game.stage.backgroundColor = "#D3EEFF";
-
+    
         var map = game.add.tilemap("stage1");
         map.addTilesetImage("ground", "tiles");
-
+    
         var bglayer = map.createLayer("bg");
         bglayer.scrollFactorX = 0.5;
-
+    
         layer = map.createLayer("layer1");
         layer.resizeWorld();
-
+    
         map.setLayer(layer);
-
-        map.setCollisionBetween(0, 6569);
-
+        
+        map.setCollisionBetween(1, 5);
+        map.setCollisionBetween(91, 95);
+        map.setCollisionBetween(181, 185);
+        map.setCollisionBetween(271, 275);
+        
+        map.setCollisionBetween(2306, 2310);
+        
+        map.setCollisionBetween(3354, 3356);
+        map.setCollisionBetween(2900, 2903);
+        map.setCollisionBetween(3714, 3716);
+    
+        setTileCollision(layer, [3354, 3355, 3356, 2900, 2901, 2902, 2903, 3714, 3715, 3716], {
+            top: true,
+            bottom: false,
+            left: false,
+            right: false
+        });
+        
         group = game.add.group();
-
+    
         frog = createFrog(group, 50, 50, "frog", 200, "left");
-
+    
         game.camera.follow(frog);
-
+    
         cursors = game.input.keyboard.createCursorKeys();
         spacebar = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
-
-	}
+    
+    }
 
 	function update() {
 
