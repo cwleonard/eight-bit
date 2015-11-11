@@ -92,9 +92,9 @@ var init = function () {
         
         map.setCollisionBetween(2306, 2310);
         
-        map.setCollisionBetween(3354, 3356);
-        map.setCollisionBetween(2900, 2903);
-        map.setCollisionBetween(3714, 3716);
+        //map.setCollisionBetween(3354, 3356);
+        //map.setCollisionBetween(2900, 2903);
+        //map.setCollisionBetween(3714, 3716);
     
         setTileCollision(layer, [3354, 3355, 3356, 2900, 2901, 2902, 2903, 3714, 3715, 3716], {
             top: true,
@@ -114,26 +114,37 @@ var init = function () {
     
     }
 
-	function update() {
-
+    var jumpTimer = 0;
+    
+    function update() {
+    
         game.physics.arcade.collide(frog, layer);
-
+    
         frog.body.velocity.x = 0;
-
+    
         if (spacebar.isDown) {
-            if (frog.body.onFloor()) {
-                frog.body.velocity.y = -600;
+            if (frog.body.onFloor() && jumpTimer === 0) {
+                // jump is allowed to start
+                jumpTimer = 1;
+                frog.body.velocity.y = -400;
+            } else if (jumpTimer > 0 && jumpTimer < 31) {
+                // keep jumping higher
+                jumpTimer++;
+                frog.body.velocity.y = -400 + (jumpTimer * 7);
             }
+        } else {
+            // jump button not being pressed, reset jump timer
+            jumpTimer = 0;
         }
-
+    
         if (cursors.left.isDown) {
             frog.body.velocity.x = -150;
         } else if (cursors.right.isDown) {
             frog.body.velocity.x = 150;
         }
-
+    
         setAnimation(frog);
-
+    
     }
 	
 	/**
