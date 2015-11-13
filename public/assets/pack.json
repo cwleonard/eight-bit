@@ -13,6 +13,21 @@
             "frameHeight": 60
         },
         {
+            "type": "audio",
+            "key": "bgmusic1",
+            "urls": ["assets/audio/Ouroboros.mp3"]
+        },
+        {
+            "type": "audio",
+            "key": "jump",
+            "urls": ["assets/audio/146726__fins__jumping.mp3"]
+        },
+        {
+            "type": "audio",
+            "key": "thud",
+            "urls": ["assets/audio/215162__otisjames__thud.mp3"]
+        },
+        {
             "type": "tilemap",
             "key": "stage1",
             "url": "assets/stage1.json",

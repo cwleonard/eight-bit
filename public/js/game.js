@@ -5,6 +5,10 @@ var init = function () {
 	var group;
 	var layer;
 	
+	var bgmusic;
+	var jumpSound;
+	var thudSound;
+	
 	var cursors;
 	var spacebar;
 	
@@ -92,6 +96,13 @@ var init = function () {
         
         map.setCollisionBetween(2306, 2310);
         
+        map.setCollisionBetween(3421, 3429);
+        map.setCollisionBetween(3511, 3521);
+        map.setCollisionBetween(3601, 3611);
+        map.setCollisionBetween(3690, 3701);
+        map.setCollisionBetween(3781, 3791);
+        
+        
         //map.setCollisionBetween(3354, 3356);
         //map.setCollisionBetween(2900, 2903);
         //map.setCollisionBetween(3714, 3716);
@@ -111,6 +122,14 @@ var init = function () {
     
         cursors = game.input.keyboard.createCursorKeys();
         spacebar = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
+        
+        bgmusic = game.sound.add("bgmusic1");
+        bgmusic.volume = 0.3;
+        bgmusic.loop = true;
+        bgmusic.play();
+        
+        jumpSound = game.sound.add("jump");
+        thudSound = game.sound.add("thud");
     
     }
 
@@ -120,6 +139,11 @@ var init = function () {
     
         game.physics.arcade.collide(frog, layer);
     
+        if (frog.body.onFloor() && frog.falling) {
+            frog.falling = false;
+            thudSound.play();
+        }
+        
         frog.body.velocity.x = 0;
     
         if (spacebar.isDown) {
@@ -127,6 +151,7 @@ var init = function () {
                 // jump is allowed to start
                 jumpTimer = 1;
                 frog.body.velocity.y = -400;
+                jumpSound.play();
             } else if (jumpTimer > 0 && jumpTimer < 31) {
                 // keep jumping higher
                 jumpTimer++;
@@ -143,6 +168,10 @@ var init = function () {
             frog.body.velocity.x = 150;
         }
     
+        if (frog.body.velocity.y > 0) {
+            frog.falling = true;
+        }
+        
         setAnimation(frog);
     
     }
@@ -168,6 +197,7 @@ var init = function () {
         f.body.setSize(60, 25, 9, 35);
         f.body.linearDamping = 1;
         f.body.collideWorldBounds = true;
+        f.falling = false;
         
         f.animations.add("left", [0, 1, 2], 10, true);
         f.animations.add("right", [3, 4, 5], 10, true);
