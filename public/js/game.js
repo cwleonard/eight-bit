@@ -4,6 +4,7 @@ var init = function () {
 	var frog;
 	var group;
 	var layer;
+	var enemies;
 	
 	var bgmusic;
 	var jumpSound;
@@ -89,6 +90,15 @@ var init = function () {
     
         map.setLayer(layer);
         
+        
+        enemies = game.add.group();
+        enemies.enableBody = true;
+        
+        map.createFromObjects('others', 6571, 'toad', 0, true, false, enemies);
+        
+        
+        //enemies.add(new Phaser.Sprite(this.game, 200, 200, 'toad', 0));
+        
         map.setCollisionBetween(1, 5);
         map.setCollisionBetween(91, 95);
         map.setCollisionBetween(181, 185);
@@ -138,6 +148,8 @@ var init = function () {
     function update() {
     
         game.physics.arcade.collide(frog, layer);
+        game.physics.arcade.collide(enemies, layer);
+        game.physics.arcade.overlap(frog, enemies, hurtFrog, null, this);
     
         if (frog.body.onFloor() && frog.falling) {
             frog.falling = false;
@@ -176,6 +188,21 @@ var init = function () {
     
     }
 	
+    function hurtFrog(f, e) {
+        
+        if (!f.immune) {
+            f.immune = true;
+            f.alpha = 0.5;
+            f.damage(1);
+            console.log("ouch!");
+            game.time.events.add(500, function() {
+                f.immune = false;
+                f.alpha = 1;
+            }, this);
+        }
+        
+    }
+    
 	/**
 	 * Creates a frog.
 	 * 
@@ -198,11 +225,17 @@ var init = function () {
         f.body.linearDamping = 1;
         f.body.collideWorldBounds = true;
         f.falling = false;
+        f.immune = false;
+        f.health = 3;
         
         f.animations.add("left", [0, 1, 2], 10, true);
         f.animations.add("right", [3, 4, 5], 10, true);
         f.animations.currentAnim = f.animations.getAnimation(ani);
 		
+        f.events.onKilled.add(function() {
+            console.log("game over!");
+        }, this);
+        
         return f;
         
 	}

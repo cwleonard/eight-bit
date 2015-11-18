@@ -13,6 +13,13 @@
             "frameHeight": 60
         },
         {
+            "type": "spritesheet",
+            "key": "toad",
+            "url": "assets/sprites/toad.png",
+            "frameWidth": 64,
+            "frameHeight": 64
+        },
+        {
             "type": "audio",
             "key": "bgmusic1",
             "urls": ["assets/audio/Ouroboros.mp3"]

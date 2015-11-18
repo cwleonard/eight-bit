@@ -21,8 +21,52 @@
          "width":150,
          "x":0,
          "y":0
+        }, 
+        {
+         "draworder":"topdown",
+         "height":30,
+         "name":"others",
+         "objects":[
+                {
+                 "gid":6571,
+                 "height":64,
+                 "id":14,
+                 "name":"toad1",
+                 "properties":
+                    {
+
+                    },
+                 "rotation":0,
+                 "type":"toad",
+                 "visible":true,
+                 "width":64,
+                 "x":1056,
+                 "y":704
+                }, 
+                {
+                 "gid":6571,
+                 "height":64,
+                 "id":15,
+                 "name":"toad2",
+                 "properties":
+                    {
+
+                    },
+                 "rotation":0,
+                 "type":"toad",
+                 "visible":true,
+                 "width":64,
+                 "x":1568,
+                 "y":768
+                }],
+         "opacity":1,
+         "type":"objectgroup",
+         "visible":true,
+         "width":150,
+         "x":0,
+         "y":0
         }],
- "nextobjectid":1,
+ "nextobjectid":18,
  "orientation":"orthogonal",
  "properties":
     {
@@ -45,6 +89,21 @@
          "spacing":0,
          "tileheight":32,
          "tilewidth":32
+        }, 
+        {
+         "firstgid":6571,
+         "image":"sprites\/toad.png",
+         "imageheight":64,
+         "imagewidth":64,
+         "margin":0,
+         "name":"enemies",
+         "properties":
+            {
+
+            },
+         "spacing":0,
+         "tileheight":64,
+         "tilewidth":64
         }],
  "tilewidth":32,
  "version":1,
