@@ -111,7 +111,10 @@ var init = function () {
         map.setCollisionBetween(3601, 3611);
         map.setCollisionBetween(3690, 3701);
         map.setCollisionBetween(3781, 3791);
-        
+
+        map.setCollisionBetween(2815, 2817);
+        map.setCollisionBetween(6055, 6057);
+
         
         //map.setCollisionBetween(3354, 3356);
         //map.setCollisionBetween(2900, 2903);
@@ -156,7 +159,9 @@ var init = function () {
             thudSound.play();
         }
         
-        frog.body.velocity.x = 0;
+        if (!frog.immune) {
+            frog.body.velocity.x = 0;
+        }
     
         if (spacebar.isDown) {
             if (frog.body.onFloor() && jumpTimer === 0) {
@@ -174,10 +179,12 @@ var init = function () {
             jumpTimer = 0;
         }
     
-        if (cursors.left.isDown) {
-            frog.body.velocity.x = -150;
-        } else if (cursors.right.isDown) {
-            frog.body.velocity.x = 150;
+        if (!frog.immune) {
+            if (cursors.left.isDown) {
+                frog.body.velocity.x = -150;
+            } else if (cursors.right.isDown) {
+                frog.body.velocity.x = 150;
+            }
         }
     
         if (frog.body.velocity.y > 0) {
@@ -193,8 +200,12 @@ var init = function () {
         if (!f.immune) {
             f.immune = true;
             f.alpha = 0.5;
-            f.damage(1);
-            console.log("ouch!");
+            f.damage(0.1);
+            if (f.body.position.x < e.body.position.x) {
+                f.body.velocity.x = -300;
+            } else {
+                f.body.velocity.x = 300;
+            }
             game.time.events.add(500, function() {
                 f.immune = false;
                 f.alpha = 1;
@@ -214,12 +225,12 @@ var init = function () {
 	 * @param ani initial animation ('left', 'right', 'front', or 'back)
 	 * @returns the created frog
 	 */
-	function createFrog(grp, x, y, ss, mv, ani) {
-		
-		var f = grp.create(x, y, ss);
-		game.physics.enable(f, Phaser.Physics.ARCADE);
-		f.name = "frog";
-		f.body.offset.x = 30;
+    function createFrog(grp, x, y, ss, mv, ani) {
+    	
+    	var f = grp.create(x, y, ss);
+    	game.physics.enable(f, Phaser.Physics.ARCADE);
+    	f.name = "frog";
+    	f.body.offset.x = 30;
         f.body.offset.y = 20;
         f.body.setSize(60, 25, 9, 35);
         f.body.linearDamping = 1;
@@ -231,14 +242,14 @@ var init = function () {
         f.animations.add("left", [0, 1, 2], 10, true);
         f.animations.add("right", [3, 4, 5], 10, true);
         f.animations.currentAnim = f.animations.getAnimation(ani);
-		
+    	
         f.events.onKilled.add(function() {
             console.log("game over!");
         }, this);
         
         return f;
         
-	}
+    }
 	
 	function setAnimation(f) {
 
