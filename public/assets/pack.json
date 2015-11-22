@@ -20,6 +20,13 @@
             "frameHeight": 64
         },
         {
+            "type": "spritesheet",
+            "key": "pencil",
+            "url": "assets/sprites/pencil.png",
+            "frameWidth": 32,
+            "frameHeight": 32
+        },
+        {
             "type": "audio",
             "key": "bgmusic1",
             "urls": ["assets/audio/Ouroboros.mp3"]

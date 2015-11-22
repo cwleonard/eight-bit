@@ -5,6 +5,7 @@ var init = function () {
 	var group;
 	var layer;
 	var enemies;
+	var weapons;
 	
 	var bgmusic;
 	var jumpSound;
@@ -12,6 +13,10 @@ var init = function () {
 	
 	var cursors;
 	var spacebar;
+	var fire;
+	
+	var FIRE_RATE = 250;
+	var nextFire;
 	
 	var game = new Phaser.Game(width, height, Phaser.CANVAS, "gameArea", {
 		preload: preload,
@@ -130,11 +135,15 @@ var init = function () {
         group = game.add.group();
     
         frog = createFrog(group, 50, 50, "frog", 200, "left");
-    
+        
+        weapons = game.add.group();
+        weapons.createMultiple(3, 'pencil', 0, false);
+        
         game.camera.follow(frog);
     
         cursors = game.input.keyboard.createCursorKeys();
         spacebar = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
+        fire = game.input.keyboard.addKey(Phaser.Keyboard.CONTROL);
         
         bgmusic = game.sound.add("bgmusic1");
         bgmusic.volume = 0.3;
@@ -143,57 +152,64 @@ var init = function () {
         
         jumpSound = game.sound.add("jump");
         thudSound = game.sound.add("thud");
+        
+    	nextFire = game.time.now + FIRE_RATE;
     
     }
 
     var jumpTimer = 0;
     
-    function update() {
-    
-        game.physics.arcade.collide(frog, layer);
-        game.physics.arcade.collide(enemies, layer);
-        game.physics.arcade.overlap(frog, enemies, hurtFrog, null, this);
-    
-        if (frog.body.onFloor() && frog.falling) {
-            frog.falling = false;
-            thudSound.play();
-        }
-        
-        if (!frog.immune) {
-            frog.body.velocity.x = 0;
-        }
-    
-        if (spacebar.isDown) {
-            if (frog.body.onFloor() && jumpTimer === 0) {
-                // jump is allowed to start
-                jumpTimer = 1;
-                frog.body.velocity.y = -400;
-                jumpSound.play();
-            } else if (jumpTimer > 0 && jumpTimer < 31) {
-                // keep jumping higher
-                jumpTimer++;
-                frog.body.velocity.y = -400 + (jumpTimer * 7);
-            }
-        } else {
-            // jump button not being pressed, reset jump timer
-            jumpTimer = 0;
-        }
-    
-        if (!frog.immune) {
-            if (cursors.left.isDown) {
-                frog.body.velocity.x = -150;
-            } else if (cursors.right.isDown) {
-                frog.body.velocity.x = 150;
-            }
-        }
-    
-        if (frog.body.velocity.y > 0) {
-            frog.falling = true;
-        }
-        
-        setAnimation(frog);
-    
-    }
+	function update() {
+	
+	    game.physics.arcade.collide(frog, layer);
+	    game.physics.arcade.collide(enemies, layer);
+	    game.physics.arcade.overlap(frog, enemies, hurtFrog, null, this);
+	    game.physics.arcade.overlap(enemies, weapons, hurtEnemy, null, this);
+	    
+	    if (frog.body.onFloor() && frog.falling) {
+	        frog.falling = false;
+	        thudSound.play();
+	    }
+	    
+	    if (!frog.immune) {
+	        frog.body.velocity.x = 0;
+	    }
+	
+	    if (spacebar.isDown) {
+	        if (frog.body.onFloor() && jumpTimer === 0) {
+	            // jump is allowed to start
+	            jumpTimer = 1;
+	            frog.body.velocity.y = -400;
+	            jumpSound.play();
+	        } else if (jumpTimer > 0 && jumpTimer < 31) {
+	            // keep jumping higher
+	            jumpTimer++;
+	            frog.body.velocity.y = -400 + (jumpTimer * 7);
+	        }
+	    } else {
+	        // jump button not being pressed, reset jump timer
+	        jumpTimer = 0;
+	    }
+	
+	    if (fire.isDown) {
+	    	throwSomething();
+	    }
+	    
+	    if (!frog.immune) {
+	        if (cursors.left.isDown) {
+	            frog.body.velocity.x = -150;
+	        } else if (cursors.right.isDown) {
+	            frog.body.velocity.x = 150;
+	        }
+	    }
+	
+	    if (frog.body.velocity.y > 0) {
+	        frog.falling = true;
+	    }
+	    
+	    setAnimation(frog);
+	
+	}
 	
     function hurtFrog(f, e) {
         
@@ -213,8 +229,52 @@ var init = function () {
         }
         
     }
-    
-	/**
+
+	function hurtEnemy(e, w) {
+	    
+	    if (!e.immune) {
+	        e.immune = true;
+	        e.alpha = 0.5;
+	        e.damage(0.1);
+	        
+	        w.exists = false;
+	        
+	        game.time.events.add(200, function() {
+	            e.immune = false;
+	            e.alpha = 1;
+	        }, this);
+	    }
+	    
+	}
+
+	function throwSomething() {
+	
+		if (game.time.now > nextFire) {
+	
+			nextFire = game.time.now + FIRE_RATE;
+	
+			var weapon = weapons.getFirstExists(false);
+	        if (weapon){
+	            weapon.exists = true;
+	            weapon.anchor.setTo(0.5, 0.5);
+	            weapon.lifespan = 1500;
+	            weapon.reset(frog.body.position.x+20, frog.body.position.y-20);
+	            game.physics.arcade.enable(weapon);
+	            weapon.body.velocity.y = -400;
+	            weapon.body.angularVelocity = 50;
+	            if(frog.direction == 1){
+	                weapon.body.velocity.x = 500;
+	            }else{
+	                weapon.body.velocity.x = -500;
+	            }
+	            
+	        }
+	
+		}
+	
+	}
+
+    /**
 	 * Creates a frog.
 	 * 
 	 * @param grp group to which this frog should be added
@@ -259,8 +319,10 @@ var init = function () {
 
 	        if (f.body.velocity.x > 0) {
 	            f.animations.play("right");
+	            f.direction = 1;
 	        } else if (f.body.velocity.x < 0) {
 	            f.animations.play("left");
+	            f.direction = -1;
 	        }
 
 	    }
