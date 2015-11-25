@@ -8,9 +8,9 @@
         {
             "type": "spritesheet",
             "key": "frog",
-            "url": "assets/sprites/frog.png",
+            "url": "assets/sprites/science-frames.png",
             "frameWidth": 79,
-            "frameHeight": 60
+            "frameHeight": 64
         },
         {
             "type": "spritesheet",
