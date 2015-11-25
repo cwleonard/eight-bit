@@ -239,9 +239,9 @@ var init = function () {
         f.immune = false;
         f.health = 3;
         
-        f.animations.add("left", [0, 1, 2], 10, true);
-        f.animations.add("right", [3, 4, 5], 10, true);
-        f.animations.currentAnim = f.animations.getAnimation(ani);
+        f.animations.add("run", [0, 1, 2], 10, true);
+        //f.animations.add("right", [3, 4, 5], 10, true);
+        //f.animations.currentAnim = f.animations.getAnimation(ani);
     	
         f.events.onKilled.add(function() {
             console.log("game over!");
@@ -258,10 +258,11 @@ var init = function () {
 	    } else {
 
 	        if (f.body.velocity.x > 0) {
-	            f.animations.play("right");
+	            f.scale.x = 1;
 	        } else if (f.body.velocity.x < 0) {
-	            f.animations.play("left");
+	            f.scale.x = -1;
 	        }
+	        f.animations.play("run");
 
 	    }
 
