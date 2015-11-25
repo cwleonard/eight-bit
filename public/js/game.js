@@ -102,8 +102,6 @@ var init = function () {
         map.createFromObjects('others', 6571, 'toad', 0, true, false, enemies);
         
         
-        //enemies.add(new Phaser.Sprite(this.game, 200, 200, 'toad', 0));
-        
         map.setCollisionBetween(1, 5);
         map.setCollisionBetween(91, 95);
         map.setCollisionBetween(181, 185);
@@ -262,7 +260,7 @@ var init = function () {
 	            game.physics.arcade.enable(weapon);
 	            weapon.body.velocity.y = -400;
 	            weapon.body.angularVelocity = 50;
-	            if(frog.direction == 1){
+	            if(frog.scale.x == 1){
 	                weapon.body.velocity.x = 500;
 	            }else{
 	                weapon.body.velocity.x = -500;
@@ -288,11 +286,10 @@ var init = function () {
     function createFrog(grp, x, y, ss, mv, ani) {
     	
     	var f = grp.create(x, y, ss);
+    	f.anchor.setTo(0.5, 0);
     	game.physics.enable(f, Phaser.Physics.ARCADE);
     	f.name = "frog";
-    	f.body.offset.x = 30;
-        f.body.offset.y = 20;
-        f.body.setSize(60, 25, 9, 35);
+        f.body.setSize(60, 25, 0, 38);
         f.body.linearDamping = 1;
         f.body.collideWorldBounds = true;
         f.falling = false;
@@ -300,8 +297,6 @@ var init = function () {
         f.health = 3;
         
         f.animations.add("run", [0, 1, 2], 10, true);
-        //f.animations.add("right", [3, 4, 5], 10, true);
-        //f.animations.currentAnim = f.animations.getAnimation(ani);
     	
         f.events.onKilled.add(function() {
             console.log("game over!");
@@ -311,30 +306,39 @@ var init = function () {
         
     }
 	
-	function setAnimation(f) {
+    function setAnimation(f) {
 
-	    if (f.body.velocity.x === 0) {
-	        f.animations.stop(null, true);
-	    } else {
+        console.log(f.body.velocity.y);
 
-	        if (f.body.velocity.x > 0) {
-<<<<<<< HEAD
-	            f.scale.x = 1;
-	        } else if (f.body.velocity.x < 0) {
-	            f.scale.x = -1;
-=======
-	            f.animations.play("right");
-	            f.direction = 1;
-	        } else if (f.body.velocity.x < 0) {
-	            f.animations.play("left");
-	            f.direction = -1;
->>>>>>> origin/master
-	        }
-	        f.animations.play("run");
+        if (f.body.velocity.y === 0) {
 
-	    }
+            if (f.body.velocity.x === 0) {
 
-	}
+                f.animations.stop(null, true);
+
+            } else {
+
+                if (f.body.velocity.x > 0) {
+                    f.scale.x = 1;
+                } else if (f.body.velocity.x < 0) {
+                    f.scale.x = -1;
+                }
+                f.animations.play("run");
+
+            }
+
+        } else {
+
+            f.animations.stop(null, true);
+            if (f.body.velocity.y < 0) {
+                f.frame = 1;
+            } else if (f.body.velocity.y > 0) {
+                f.frame = 2;
+            }
+
+        }
+
+    }
 	
 	function render() {
 		
