@@ -307,37 +307,38 @@ var init = function () {
     }
 	
     function setAnimation(f) {
-
-        console.log(f.body.velocity.y);
-
+    
         if (f.body.velocity.y === 0) {
-
+    
             if (f.body.velocity.x === 0) {
-
+    
+                // no animation, the frog is still
                 f.animations.stop(null, true);
-
+    
             } else {
-
+    
                 if (f.body.velocity.x > 0) {
                     f.scale.x = 1;
                 } else if (f.body.velocity.x < 0) {
                     f.scale.x = -1;
                 }
                 f.animations.play("run");
-
+    
             }
-
+    
         } else {
-
+    
+            // no animation, use a fixed frame
             f.animations.stop(null, true);
+            
             if (f.body.velocity.y < 0) {
                 f.frame = 1;
             } else if (f.body.velocity.y > 0) {
                 f.frame = 2;
             }
-
+    
         }
-
+    
     }
 	
 	function render() {
