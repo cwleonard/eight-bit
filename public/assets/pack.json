@@ -16,7 +16,7 @@
             "type": "spritesheet",
             "key": "toad",
             "url": "assets/sprites/toad.png",
-            "frameWidth": 64,
+            "frameWidth": 69,
             "frameHeight": 64
         },
         {

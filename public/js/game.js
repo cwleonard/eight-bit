@@ -96,11 +96,25 @@ var init = function () {
         map.setLayer(layer);
         
         
-        enemies = game.add.group();
-        enemies.enableBody = true;
-        
-        map.createFromObjects('others', 6571, 'toad', 0, true, false, enemies);
-        
+		enemies = game.add.group();
+		enemies.enableBody = true;
+		
+		var toads = game.add.group();
+		map.createFromObjects('others', 6571, 'toad', 0, true, false, toads);
+		
+		toads.forEach(function(t) {
+			
+			t.jumping = false;
+			game.physics.enable(t, Phaser.Physics.ARCADE);
+			t.body.setSize(60, 25, 0, 38);
+			
+			game.time.events.add(5000, function() {
+				jumpToad(t);
+		    }, this);
+			
+		}, this);
+		
+		enemies.addMultiple(toads);
         
         map.setCollisionBetween(1, 5);
         map.setCollisionBetween(91, 95);
@@ -206,6 +220,18 @@ var init = function () {
 	    }
 	    
 	    setAnimation(frog);
+	    
+		enemies.forEach(function(t) {
+			
+			if (t.body.onFloor() && t.jumping) {
+				t.jumping = false;
+				t.frame = 0;
+				game.time.events.add(5000, function() {
+		    		jumpToad(t);
+		        }, this);
+			}
+			
+		}, this);
 	
 	}
 	
@@ -306,6 +332,14 @@ var init = function () {
         
     }
 	
+    function jumpToad(t) {
+    	
+    	t.frame = 1;
+    	t.body.velocity.y = -600;
+    	t.jumping = true;
+    	
+    }
+    
     function setAnimation(f) {
     
         if (f.body.velocity.y === 0) {
