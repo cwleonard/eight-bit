@@ -317,32 +317,32 @@ var init = function () {
     }
 	
     // any object that should be a toad
-    function setupToad(obj) {
-    	
-    	game.physics.enable(obj, Phaser.Physics.ARCADE);
-    	obj.body.setSize(60, 25, 0, 38);
-    	
+	function setupToad(obj) {
+	
+		game.physics.enable(obj, Phaser.Physics.ARCADE);
+		obj.body.setSize(60, 25, 0, 38);
+	
 		obj.jumping = true;
-		
+	
 		obj.jump = function() {
-	    	this.frame = 1;
-	    	this.body.velocity.y = -600;
-	    	this.jumping = true;
+			this.frame = 1;
+			this.body.velocity.y = -600;
+			this.jumping = true;
 		};
-		
+	
 		obj.update = function() {
-			
+	
 			if (this.body.onFloor() && this.jumping) {
 				this.jumping = false;
 				this.frame = 0;
 				game.time.events.add(5000, function() {
-		    		this.jump();
-		        }, this);
+					this.jump();
+				}, this);
 			}
-
+	
 		};
-    	
-    }
+	
+	}
     
     function setAnimation(f) {
     
