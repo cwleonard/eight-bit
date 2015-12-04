@@ -103,15 +103,7 @@ var init = function () {
 		map.createFromObjects('others', 6571, 'toad', 0, true, false, toads);
 		
 		toads.forEach(function(t) {
-			
-			t.jumping = false;
-			game.physics.enable(t, Phaser.Physics.ARCADE);
-			t.body.setSize(60, 25, 0, 38);
-			
-			game.time.events.add(5000, function() {
-				jumpToad(t);
-		    }, this);
-			
+			setupToad(t);
 		}, this);
 		
 		enemies.addMultiple(toads);
@@ -222,15 +214,7 @@ var init = function () {
 	    setAnimation(frog);
 	    
 		enemies.forEach(function(t) {
-			
-			if (t.body.onFloor() && t.jumping) {
-				t.jumping = false;
-				t.frame = 0;
-				game.time.events.add(5000, function() {
-		    		jumpToad(t);
-		        }, this);
-			}
-			
+			t.update();
 		}, this);
 	
 	}
@@ -332,11 +316,31 @@ var init = function () {
         
     }
 	
-    function jumpToad(t) {
+    // any object that should be a toad
+    function setupToad(obj) {
     	
-    	t.frame = 1;
-    	t.body.velocity.y = -600;
-    	t.jumping = true;
+    	game.physics.enable(obj, Phaser.Physics.ARCADE);
+    	obj.body.setSize(60, 25, 0, 38);
+    	
+		obj.jumping = true;
+		
+		obj.jump = function() {
+	    	this.frame = 1;
+	    	this.body.velocity.y = -600;
+	    	this.jumping = true;
+		};
+		
+		obj.update = function() {
+			
+			if (this.body.onFloor() && this.jumping) {
+				this.jumping = false;
+				this.frame = 0;
+				game.time.events.add(5000, function() {
+		    		this.jump();
+		        }, this);
+			}
+
+		};
     	
     }
     
