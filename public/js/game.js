@@ -6,6 +6,8 @@ var init = function () {
 	var layer;
 	var enemies;
 	var weapons;
+	var meters;
+	var health;
 	
 	var bgmusic;
 	var jumpSound;
@@ -158,6 +160,8 @@ var init = function () {
         thudSound = game.sound.add("thud");
         
     	nextFire = game.time.now + FIRE_RATE;
+    	
+    	createHealthBar();
     
     }
 
@@ -216,6 +220,8 @@ var init = function () {
 		enemies.forEach(function(t) {
 			t.update();
 		}, this);
+		
+		updateHealthBar();
 	
 	}
 	
@@ -224,7 +230,7 @@ var init = function () {
         if (!f.immune) {
             f.immune = true;
             f.alpha = 0.5;
-            f.damage(0.1);
+            f.damage(10);
             if (f.body.position.x < e.body.position.x) {
                 f.body.velocity.x = -300;
             } else {
@@ -304,7 +310,7 @@ var init = function () {
         f.body.collideWorldBounds = true;
         f.falling = false;
         f.immune = false;
-        f.health = 3;
+        f.health = 100;
         
         f.animations.add("run", [0, 1, 2], 10, true);
     	
@@ -313,6 +319,48 @@ var init = function () {
         }, this);
         
         return f;
+        
+    }
+    
+    function createHealthBar() {
+        
+        meters = game.add.group();
+        
+        // create a plain black rectangle to use as the background of a health meter
+        var meterBackgroundBitmap = game.add.bitmapData(20, 100);
+        meterBackgroundBitmap.ctx.beginPath();
+        meterBackgroundBitmap.ctx.rect(0, 0, meterBackgroundBitmap.width, meterBackgroundBitmap.height);
+        meterBackgroundBitmap.ctx.fillStyle = '#000000';
+        meterBackgroundBitmap.ctx.fill();
+    
+        // create a Sprite using the background bitmap data
+        var healthMeterBG = game.add.sprite(10, 10, meterBackgroundBitmap);
+        healthMeterBG.fixedToCamera = true;
+        meters.add(healthMeterBG);
+    
+        // create a red rectangle to use as the health meter itself
+        var healthBitmap = game.add.bitmapData(12, 92);
+        healthBitmap.ctx.beginPath();
+        healthBitmap.ctx.rect(0, 0, healthBitmap.width, healthBitmap.height);
+        healthBitmap.ctx.fillStyle = '#FF0000';
+        healthBitmap.ctx.fill();
+        
+        // create the health Sprite using the red rectangle bitmap data
+        health = game.add.sprite(14, 14, healthBitmap);
+        meters.add(health);
+        health.fixedToCamera = true;
+        
+    }
+    
+    function updateHealthBar() {
+        
+        var m = (100 - frog.health) / 100;
+        var bh = 92 - (92 * m);
+        var offset = 92 - bh;
+        
+        health.key.context.clearRect(0, 0, health.width, health.height);
+        health.key.context.fillRect(0, offset, 12, bh);
+        health.key.dirty = true;
         
     }
 	
