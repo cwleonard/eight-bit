@@ -6,6 +6,8 @@ var init = function () {
 	var layer;
 	var enemies;
 	var weapons;
+	var weaponsGroup;
+	var weaponIndex = 0;
 	var meters;
 	var health;
 	
@@ -16,6 +18,7 @@ var init = function () {
 	var cursors;
 	var spacebar;
 	var fire;
+	var weaponSelect;
 	
 	var FIRE_RATE = 250;
 	var nextFire;
@@ -142,14 +145,70 @@ var init = function () {
     
         frog = createFrog(group, 50, 50, "frog", 200, "left");
         
-        weapons = game.add.group();
-        weapons.createMultiple(3, 'pencil', 0, false);
+        weaponsGroup = game.add.group();
+        weapons = [];
+        weapons.push({
+           name: 'pencil',
+           lifespan: 1500,
+           velocity: {
+               x: 500,
+               y: -400
+           },
+           spin: 50,
+           power: 10
+        });
+        
+        weapons.push({
+            name: 'flask',
+            lifespan: 1500,
+            velocity: {
+                x: 600,
+                y: -600
+            },
+            spin: 50,
+            power: 20
+         });
+        
+        weapons.push({
+            name: 'hammer',
+            lifespan: 1500,
+            velocity: {
+                x: 600,
+                y: -400
+            },
+            spin: 50,
+            power: 30
+         });
+        
+        weapons.push({
+            name: 'brace',
+            lifespan: 1500,
+            velocity: {
+                x: 800,
+                y: -200
+            },
+            spin: 80,
+            power: 40
+         });
+        
+        for (var w = 0; w < weapons.length; w++) {
+            var wg = game.add.group();
+            wg.createMultiple(3, weapons[w].name, 0, false);
+            weapons[w].sprites = wg;
+            weaponsGroup.add(wg);
+        }
         
         game.camera.follow(frog);
     
         cursors = game.input.keyboard.createCursorKeys();
         spacebar = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
         fire = game.input.keyboard.addKey(Phaser.Keyboard.CONTROL);
+        weaponSelect = game.input.keyboard.addKeys({
+            'one'  : Phaser.KeyCode.ONE,
+            'two'  : Phaser.KeyCode.TWO,
+            'three': Phaser.KeyCode.THREE,
+            'four' : Phaser.KeyCode.FOUR
+        });
         
         bgmusic = game.sound.add("bgmusic1");
         bgmusic.volume = 0.3;
@@ -172,7 +231,7 @@ var init = function () {
 	    game.physics.arcade.collide(frog, layer);
 	    game.physics.arcade.collide(enemies, layer);
 	    game.physics.arcade.overlap(frog, enemies, hurtFrog, null, this);
-	    game.physics.arcade.overlap(enemies, weapons, hurtEnemy, null, this);
+	    game.physics.arcade.overlap(enemies, weaponsGroup.children, hurtEnemy, null, this);
 	    
 	    if (frog.body.onFloor() && frog.falling) {
 	        frog.falling = false;
@@ -197,6 +256,16 @@ var init = function () {
 	    } else {
 	        // jump button not being pressed, reset jump timer
 	        jumpTimer = 0;
+	    }
+	    
+	    if (weaponSelect.one.isDown) {
+	        weaponIndex = 0;
+	    } else if (weaponSelect.two.isDown) {
+	        weaponIndex = 1;
+        } else if (weaponSelect.three.isDown) {
+            weaponIndex = 2;
+        } else if (weaponSelect.four.isDown) {
+            weaponIndex = 3;
 	    }
 	
 	    if (fire.isDown) {
@@ -244,49 +313,54 @@ var init = function () {
         
     }
 
-	function hurtEnemy(e, w) {
-	    
-	    if (!e.immune) {
-	        e.immune = true;
-	        e.alpha = 0.5;
-	        e.damage(0.1);
-	        
-	        w.exists = false;
-	        
-	        game.time.events.add(200, function() {
-	            e.immune = false;
-	            e.alpha = 1;
-	        }, this);
-	    }
-	    
-	}
+    function hurtEnemy(e, w) {
+        
+        if (!e.immune) {
+            e.immune = true;
+            e.alpha = 0.5;
+            e.damage(w.power);
+            
+            w.exists = false;
+            
+            game.time.events.add(200, function() {
+                e.immune = false;
+                e.alpha = 1;
+            }, this);
+        }
+        
+    }
 
-	function throwSomething() {
-	
-		if (game.time.now > nextFire) {
-	
-			nextFire = game.time.now + FIRE_RATE;
-	
-			var weapon = weapons.getFirstExists(false);
-	        if (weapon){
-	            weapon.exists = true;
-	            weapon.anchor.setTo(0.5, 0.5);
-	            weapon.lifespan = 1500;
-	            weapon.reset(frog.body.position.x+20, frog.body.position.y-20);
-	            game.physics.arcade.enable(weapon);
-	            weapon.body.velocity.y = -400;
-	            weapon.body.angularVelocity = 50;
-	            if(frog.scale.x == 1){
-	                weapon.body.velocity.x = 500;
-	            }else{
-	                weapon.body.velocity.x = -500;
-	            }
-	            
-	        }
-	
-		}
-	
-	}
+    function throwSomething() {
+    
+        // has it been long enough? can we throw something yet?
+    	if (game.time.now > nextFire) {
+    
+    		nextFire = game.time.now + FIRE_RATE;
+    
+    		// see if a weapon is available from the group
+    		var weapon = weapons[weaponIndex].sprites.getFirstExists(false);
+            if (weapon) {
+    
+                weapon.exists = true;
+                weapon.anchor.setTo(0.5, 0.5);
+                weapon.reset(frog.body.position.x+20, frog.body.position.y-20);
+                game.physics.arcade.enable(weapon);
+    
+                weapon.lifespan = weapons[weaponIndex].lifespan;
+                weapon.body.angularVelocity = weapons[weaponIndex].spin;
+                weapon.body.velocity.y = weapons[weaponIndex].velocity.y;
+                weapon.power = weapons[weaponIndex].power;
+                if (frog.scale.x == 1) {
+                    weapon.body.velocity.x = weapons[weaponIndex].velocity.x;
+                } else{
+                    weapon.body.velocity.x = -weapons[weaponIndex].velocity.x;
+                }
+                
+            }
+    
+    	}
+    
+    }
 
     /**
 	 * Creates a frog.
@@ -369,6 +443,7 @@ var init = function () {
 	
 		game.physics.enable(obj, Phaser.Physics.ARCADE);
 		obj.body.setSize(60, 25, 0, 38);
+		obj.health = 40;
 	
 		obj.jumping = true;
 	

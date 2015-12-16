@@ -27,6 +27,27 @@
             "frameHeight": 32
         },
         {
+            "type": "spritesheet",
+            "key": "flask",
+            "url": "assets/sprites/flask.png",
+            "frameWidth": 32,
+            "frameHeight": 32
+        },
+        {
+            "type": "spritesheet",
+            "key": "hammer",
+            "url": "assets/sprites/hammer.png",
+            "frameWidth": 32,
+            "frameHeight": 32
+        },
+        {
+            "type": "spritesheet",
+            "key": "brace",
+            "url": "assets/sprites/brace.png",
+            "frameWidth": 32,
+            "frameHeight": 32
+        },
+        {
             "type": "audio",
             "key": "bgmusic1",
             "urls": ["assets/audio/Ouroboros.mp3"]
