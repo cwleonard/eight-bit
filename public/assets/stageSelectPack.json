@@ -1,0 +1,14 @@
+{
+    "main": [
+        {
+            "type": "image",
+            "key": "splash",
+            "url": "assets/images/splash.png"
+        },
+        {
+            "type": "audio",
+            "key": "bgmusic1",
+            "urls": ["assets/audio/Ouroboros.mp3"]
+        }
+    ]
+}
