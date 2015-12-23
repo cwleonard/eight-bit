@@ -1,6 +1,8 @@
 
 function stage(n) {
     
+	var thisLevel = n;
+	
     var frog;
     var group;
     var layer;
@@ -298,7 +300,7 @@ function stage(n) {
     
         this.stage.backgroundColor = "#D3EEFF";
     
-        var map = this.add.tilemap("stage1");
+        var map = this.add.tilemap("stage" + thisLevel);
         map.addTilesetImage("ground", "tiles");
     
         var bglayer = map.createLayer("bg");
@@ -335,7 +337,15 @@ function stage(n) {
         map.setCollisionBetween(3690, 3701);
         map.setCollisionBetween(3781, 3791);
 
-        map.setCollisionBetween(2815, 2817);
+        map.setCollisionBetween(65, 88);
+        map.setCollisionBetween(155, 178);
+        map.setCollisionBetween(245, 268);
+        map.setCollisionBetween(335, 358);
+
+        // clouds/water
+        map.setCollisionBetween(5669, 6483);
+        
+        
         map.setCollisionBetween(6055, 6057);
 
         
@@ -419,7 +429,7 @@ function stage(n) {
             'four' : Phaser.KeyCode.FOUR
         });
         
-        bgmusic = this.sound.add("bgmusic1");
+        bgmusic = this.sound.add("bgmusic" + thisLevel);
         bgmusic.volume = 0.3;
         bgmusic.loop = true;
         bgmusic.play();

@@ -49,6 +49,11 @@
         },
         {
             "type": "audio",
+            "key": "bgmusic0",
+            "urls": ["assets/audio/Danger_Storm.mp3"]
+        },
+        {
+            "type": "audio",
             "key": "bgmusic1",
             "urls": ["assets/audio/Ouroboros.mp3"]
         },
@@ -61,6 +66,13 @@
             "type": "audio",
             "key": "thud",
             "urls": ["assets/audio/215162__otisjames__thud.mp3"]
+        },
+        {
+            "type": "tilemap",
+            "key": "stage0",
+            "url": "assets/stage0.json",
+            "data": null,
+            "format": "TILED_JSON"
         },
         {
             "type": "tilemap",

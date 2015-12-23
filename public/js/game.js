@@ -2,11 +2,15 @@
 var init = function () {
 	
 	var stageSelectState = selectStage();
-	var sandboxStage = stage(0);
 	
-	var game = new Phaser.Game(width, height, Phaser.CANVAS, "gameArea", stageSelectState);
-
+	var sandboxStage = stage(0);
+	var stageOne     = stage(1);
+	
+	var game = new Phaser.Game(width, height, Phaser.CANVAS, "gameArea",
+			stageSelectState);
+	
 	game.state.add("sandbox", sandboxStage);
+	game.state.add("one", stageOne);
 	
 };
 
