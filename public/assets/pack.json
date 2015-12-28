@@ -49,12 +49,12 @@
         },
         {
             "type": "audio",
-            "key": "bgmusic0",
+            "key": "DangerStorm",
             "urls": ["assets/audio/Danger_Storm.mp3"]
         },
         {
             "type": "audio",
-            "key": "bgmusic1",
+            "key": "Ouroboros",
             "urls": ["assets/audio/Ouroboros.mp3"]
         },
         {
@@ -69,14 +69,14 @@
         },
         {
             "type": "tilemap",
-            "key": "stage0",
+            "key": "LevelSandbox",
             "url": "assets/stage0.json",
             "data": null,
             "format": "TILED_JSON"
         },
         {
             "type": "tilemap",
-            "key": "stage1",
+            "key": "Level1",
             "url": "assets/stage1.json",
             "data": null,
             "format": "TILED_JSON"

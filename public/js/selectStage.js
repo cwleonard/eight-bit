@@ -1,5 +1,6 @@
-function selectStage() {
+function selectStage(gs) {
 
+    var gameState = gs;
     var keys;
     var splash;
     
@@ -17,16 +18,17 @@ function selectStage() {
             's'  : Phaser.KeyCode.S,
             'o'  : Phaser.KeyCode.O
         });
-
         
     }
     
     function update() {
         
         if (keys.s.isDown) {
-            this.state.start("sandbox");
+            gameState.currentLevel = "sb";
+            this.state.start("level");
         } else if (keys.o.isDown) {
-        	this.state.start("one");
+            gameState.currentLevel = "one";
+        	this.state.start("level");
         }
         
     }

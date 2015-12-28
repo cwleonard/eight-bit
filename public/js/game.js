@@ -1,16 +1,31 @@
 
 var init = function () {
 	
-	var stageSelectState = selectStage();
-	
-	var sandboxStage = stage(0);
-	var stageOne     = stage(1);
-	
-	var game = new Phaser.Game(width, height, Phaser.CANVAS, "gameArea",
-			stageSelectState);
-	
-	game.state.add("sandbox", sandboxStage);
-	game.state.add("one", stageOne);
+    var sandboxLevel = {
+            map: "LevelSandbox",
+            music: "Ouroboros"
+    };
+    
+    var levelOne = {
+            map: "Level1",
+            music: "DangerStorm"
+    };
+    
+    var gameState = {
+            levels: [],
+            currentLevel: "sb"
+    };
+    
+    gameState.levels["sb"] = sandboxLevel;
+    gameState.levels["one"] = levelOne;
+    
+    var theStage = stage(gameState);
+    var stageSelectState = selectStage(gameState);
+    
+    var game = new Phaser.Game(width, height, Phaser.CANVAS, "gameArea");
+    
+    game.state.add("stageSelect", stageSelectState, true);
+    game.state.add("level", theStage);
 	
 };
 

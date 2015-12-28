@@ -1,7 +1,10 @@
 
-function stage(n) {
+function stage(gs) {
     
-	var thisLevel = n;
+    var gameState = gs;
+    
+	var mapKey;
+	var musicKey;
 	
     var frog;
     var group;
@@ -26,8 +29,6 @@ function stage(n) {
     var nextFire;
 
     var jumpTimer = 0;
-    
-    
     
     
     
@@ -172,6 +173,8 @@ function stage(n) {
         
         f.events.onKilled.add(function() {
             console.log("game over!");
+            bgmusic.stop();
+            game.state.start("stageSelect");
         }, this);
         
         return f;
@@ -294,13 +297,16 @@ function stage(n) {
     
     function create() {
         
+        mapKey = gameState.levels[gameState.currentLevel].map;
+        musicKey = gameState.levels[gameState.currentLevel].music;
+        
         this.physics.startSystem(Phaser.Physics.ARCADE);
     
         this.physics.arcade.gravity.y = 1500;
     
         this.stage.backgroundColor = "#D3EEFF";
     
-        var map = this.add.tilemap("stage" + thisLevel);
+        var map = this.add.tilemap(mapKey);
         map.addTilesetImage("ground", "tiles");
     
         var bglayer = map.createLayer("bg");
@@ -429,7 +435,7 @@ function stage(n) {
             'four' : Phaser.KeyCode.FOUR
         });
         
-        bgmusic = this.sound.add("bgmusic" + thisLevel);
+        bgmusic = this.sound.add(musicKey);
         bgmusic.volume = 0.3;
         bgmusic.loop = true;
         bgmusic.play();
