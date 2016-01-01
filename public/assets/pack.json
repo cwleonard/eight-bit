@@ -13,11 +13,25 @@
             "frameHeight": 64
         },
         {
+            "type": "image",
+            "key": "dino-plate",
+            "url": "assets/sprites/dino-plate.png",
+            "frameWidth": 41,
+            "frameHeight": 43
+        },
+        {
             "type": "spritesheet",
             "key": "toad",
             "url": "assets/sprites/toad.png",
             "frameWidth": 69,
             "frameHeight": 64
+        },
+        {
+            "type": "spritesheet",
+            "key": "dinosaur",
+            "url": "assets/sprites/dinosaur-frames.png",
+            "frameWidth": 456,
+            "frameHeight": 192
         },
         {
             "type": "spritesheet",
@@ -66,6 +80,11 @@
             "type": "audio",
             "key": "thud",
             "urls": ["assets/audio/215162__otisjames__thud.mp3"]
+        },
+        {
+            "type": "audio",
+            "key": "roar",
+            "urls": ["assets/audio/roar.mp3"]
         },
         {
             "type": "tilemap",
