@@ -80,13 +80,15 @@ function stage(gs) {
     function hurtFrog(f, e) {
         
         if (!f.immune) {
+            f.animations.stop(null, true);
+            f.frame = 3;
             f.immune = true;
             f.alpha = 0.5;
             f.damage(10);
             if (f.body.position.x < e.body.position.x) {
-                f.body.velocity.x = -300;
+                f.body.velocity.x = -200;
             } else {
-                f.body.velocity.x = 300;
+                f.body.velocity.x = 200;
             }
             this.time.events.add(500, function() {
                 f.immune = false;
@@ -164,7 +166,9 @@ function stage(gs) {
         f.name = "frog";
         f.body.setSize(60, 25, 0, 38);
         f.body.linearDamping = 1;
-        f.body.collideWorldBounds = true;
+        f.body.collideWorldBounds = false;
+        f.checkWorldBounds = true;
+        f.outOfBoundsKill = true;
         f.falling = false;
         f.immune = false;
         f.health = 100;
@@ -265,8 +269,6 @@ function stage(gs) {
         obj.tailTosser.maxParticleSpeed.y = -500;
         obj.tailTosser.minParticleSpeed.y = -300;
         
-        //enemies.add(obj.tailTosser);
-        
         game.physics.enable(obj, Phaser.Physics.ARCADE);
         
         obj.anchor.setTo(0.5, 0);
@@ -277,9 +279,11 @@ function stage(gs) {
         obj.walkDir = 1;
         obj.screaming = false;
         obj.attacking = false;
+        obj.active = false;
+        obj.immunue = true;
     
         obj.animations.add("walk", [2, 3], 3, true);
-        obj.animations.play("walk");
+        //obj.animations.play("walk");
 
         obj.turnAround = function() {
             this.walkDir = -this.walkDir;
@@ -287,6 +291,7 @@ function stage(gs) {
         };
         
         obj.scream = function() {
+            this.immune = false;
             this.roarSound.play();
             this.body.velocity.x = 0;
             this.screaming = true;
@@ -313,6 +318,16 @@ function stage(gs) {
         };
 
         obj.update = function() {
+            
+            if (!this.active && Math.abs(Math.abs(frog.position.x) - Math.abs(this.position.x)) < 600) {
+                this.active = true;
+                this.scream();
+            }
+            
+            if (!this.active) return;
+            
+            if (!this.screaming) this.immune = true;
+            
             game.physics.arcade.overlap(frog, this.tailTosser, hurtFrog, null, game);
             if (this.walkDir == 1 && this.position.x < (this.startingX - 500)) {
                 this.turnAround();
@@ -335,7 +350,7 @@ function stage(gs) {
                 // no animation, the frog is still
                 f.animations.stop(null, true);
     
-            } else {
+            } else if (!f.immune) {
     
                 if (f.body.velocity.x > 0) {
                     f.scale.x = 1;
@@ -346,7 +361,7 @@ function stage(gs) {
     
             }
     
-        } else {
+        } else if (!f.immune) {
     
             // no animation, use a fixed frame
             f.animations.stop(null, true);
