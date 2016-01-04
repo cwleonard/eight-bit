@@ -166,7 +166,7 @@ function stage(gs) {
         f.name = "frog";
         f.body.setSize(60, 25, 0, 38);
         f.body.linearDamping = 1;
-        f.body.collideWorldBounds = false;
+        f.body.collideWorldBounds = true;
         f.checkWorldBounds = true;
         f.outOfBoundsKill = true;
         f.falling = false;
@@ -390,6 +390,7 @@ function stage(gs) {
         musicKey = gameState.levels[gameState.currentLevel].music;
         
         this.physics.startSystem(Phaser.Physics.ARCADE);
+        this.physics.arcade.checkCollision.down = false;
     
         this.physics.arcade.gravity.y = 1500;
     
