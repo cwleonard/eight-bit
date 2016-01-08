@@ -12,6 +12,8 @@ function selectStage(gs) {
     
     function create() {
         
+        gameState.lives = 3;
+        
         splash = this.add.image(0, 0, "splash");
         
         keys = this.input.keyboard.addKeys({

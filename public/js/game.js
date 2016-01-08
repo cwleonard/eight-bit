@@ -13,7 +13,8 @@ var init = function () {
     
     var gameState = {
             levels: [],
-            currentLevel: "sb"
+            currentLevel: "sb",
+            lives: 3
     };
     
     gameState.levels["sb"] = sandboxLevel;

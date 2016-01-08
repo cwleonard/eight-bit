@@ -20,6 +20,11 @@
             "frameHeight": 43
         },
         {
+            "type": "image",
+            "key": "glasses",
+            "url": "assets/images/glasses.png"
+        },
+        {
             "type": "spritesheet",
             "key": "toad",
             "url": "assets/sprites/toad.png",
@@ -80,6 +85,11 @@
             "type": "audio",
             "key": "thud",
             "urls": ["assets/audio/215162__otisjames__thud.mp3"]
+        },
+        {
+            "type": "audio",
+            "key": "die",
+            "urls": ["assets/audio/219723__b-lamerichs__8.mp3"]
         },
         {
             "type": "audio",

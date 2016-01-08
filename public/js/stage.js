@@ -15,10 +15,12 @@ function stage(gs) {
     var weaponIndex = 0;
     var meters;
     var health;
+    var livesText;
     
     var bgmusic;
     var jumpSound;
     var thudSound;
+    var dieSound;
     
     var cursors;
     var spacebar;
@@ -176,9 +178,15 @@ function stage(gs) {
         f.animations.add("run", [0, 1, 2], 10, true);
         
         f.events.onKilled.add(function() {
-            console.log("game over!");
+            dieSound.play();
+            gameState.lives--;
             bgmusic.stop();
-            game.state.start("stageSelect");
+            if (gameState.lives === 0) {
+                console.log("game over!");
+                game.state.start("stageSelect");
+            } else {
+                game.state.restart();
+            }
         }, this);
         
         return f;
@@ -186,8 +194,6 @@ function stage(gs) {
     }
     
     function createHealthBar(game) {
-        
-        meters = game.add.group();
         
         // create a plain black rectangle to use as the background of a health meter
         var meterBackgroundBitmap = game.add.bitmapData(20, 100);
@@ -214,7 +220,28 @@ function stage(gs) {
         health.fixedToCamera = true;
         
     }
+
+    function createLivesCounter(game) {
+        
+        var g = game.add.image(40, 15, "glasses", 0, meters);
+        g.fixedToCamera = true;
+
+        livesText = game.add.text(78, 5, "x " + gameState.lives, {
+            fontSize: 20,
+            fill: "#FFFFFF",
+            stroke: "#000000",
+            strokeThickness: 3
+        }, meters);
+
+        livesText.fixedToCamera = true;
+        
+    }
     
+    function extraLife() {
+        gameState.lives++;
+        livesText.text = "x " + gameState.lives;
+    }
+
     function updateHealthBar() {
         
         var m = (100 - frog.health) / 100;
@@ -539,10 +566,13 @@ function stage(gs) {
         
         jumpSound = this.sound.add("jump");
         thudSound = this.sound.add("thud");
+        dieSound = this.sound.add("die");
         
         nextFire = this.time.now + FIRE_RATE;
         
+        meters = this.add.group();
         createHealthBar(this);
+        createLivesCounter(this);
     
     }
     
