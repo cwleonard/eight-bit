@@ -85,17 +85,19 @@ function stage(gs) {
             f.animations.stop(null, true);
             f.frame = 3;
             f.immune = true;
-            f.alpha = 0.5;
             f.damage(10);
             if (f.body.position.x < e.body.position.x) {
                 f.body.velocity.x = -200;
             } else {
                 f.body.velocity.x = 200;
             }
-            this.time.events.add(500, function() {
+            
+            var t = this.add.tween(f);
+            t.onComplete.add(function() {
                 f.immune = false;
-                f.alpha = 1;
-            }, this);
+            });
+            t.to( { alpha: 0.5 }, 50, Phaser.Easing.Linear.None, true, 0, 2, true);
+            
         }
         
     }
