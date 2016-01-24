@@ -1,12 +1,12 @@
 
 var init = function () {
 	
-    var sandboxLevel = {
+    var levelOne = {
             map: "LevelSandbox",
             music: "Ouroboros"
     };
     
-    var levelOne = {
+    var levelTwo = {
             map: "Level1",
             music: "DangerStorm"
     };
@@ -14,11 +14,12 @@ var init = function () {
     var gameState = {
             levels: [],
             currentLevel: "sb",
-            lives: 3
+            lives: 3,
+            stagesComplete: [ false, false, false, false, false, false, false, false ]
     };
     
-    gameState.levels["sb"] = sandboxLevel;
-    gameState.levels["one"] = levelOne;
+    gameState.levels[0] = levelOne;
+    gameState.levels[1] = levelTwo;
     
     var theStage = stage(gameState);
     var stageSelectState = selectStage(gameState);

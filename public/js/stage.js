@@ -310,6 +310,12 @@ function stage(gs) {
         obj.attacking = false;
         obj.active = false;
         obj.immunue = true;
+        
+        obj.events.onKilled.add(function() {
+            gameState.stagesComplete[gameState.currentLevel] = true;
+            bgmusic.stop();
+            game.state.start("stageSelect");            
+        });
     
         obj.animations.add("walk", [2, 3], 3, true);
         //obj.animations.play("walk");
