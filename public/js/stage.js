@@ -10,6 +10,7 @@ function stage(gs) {
     var group;
     var layer;
     var enemies;
+    var platforms;
     var weapons;
     var weaponsGroup;
     var weaponIndex = 0;
@@ -176,6 +177,17 @@ function stage(gs) {
         f.falling = false;
         f.immune = false;
         f.health = 100;
+        
+        f.lockTo = function(platform) {
+            this.locked = true;
+            this.lockedTo = platform;
+            this.body.velocity.y = 0;
+        };
+        
+        f.cancelLock = function() {
+            this.locked = false;
+            this.lockedTo = null;
+        }
         
         f.animations.add("run", [0, 1, 2], 10, true);
         
@@ -378,7 +390,7 @@ function stage(gs) {
 
     function setAnimation(f) {
     
-        if (f.body.velocity.y === 0) {
+        if (f.body.velocity.y === 0 || f.locked) {
     
             if (f.body.velocity.x === 0) {
     
@@ -411,6 +423,13 @@ function stage(gs) {
     
     }
 
+    function platformSep(s, platform) {
+        
+        if (!s.locked) {
+            s.lockTo(platform);
+        }
+        
+    }
     
     // --------------------------------------
     
@@ -441,6 +460,29 @@ function stage(gs) {
         layer.resizeWorld();
     
         map.setLayer(layer);
+        
+        platforms = this.add.group();
+        platforms.enableBody = true;
+        map.createFromObjects('others', 6573, 'cloud-blue', 0, true, false, platforms);
+        platforms.forEach(function(p) {
+            
+            this.physics.enable(p, Phaser.Physics.ARCADE);
+            p.body.allowGravity = false;
+            p.body.immovable = true;
+            
+            var t = this.add.tween(p.position);
+            if (p.direction == "left") {
+                t.to( { x: p.position.x - 200 }, 3000, Phaser.Easing.Linear.None, true, 0, -1, true);
+            } else if (p.direction == "right") {
+                t.to( { x: p.position.x + 200 }, 3000, Phaser.Easing.Linear.None, true, 0, -1, true);
+            } else if (p.direction == "up") {
+                t.to( { y: p.position.y - 200 }, 3000, Phaser.Easing.Linear.None, true, 0, -1, true);
+            } else if (p.direction == "down") {
+                t.to( { y: p.position.y + 200 }, 3000, Phaser.Easing.Linear.None, true, 0, -1, true);
+            }
+            
+        }, this);
+        
         
         
         enemies = this.add.group();
@@ -588,10 +630,20 @@ function stage(gs) {
         
         this.physics.arcade.collide(frog, layer);
         this.physics.arcade.collide(enemies, layer);
+        this.physics.arcade.collide(frog, platforms, platformSep, null, this);
         this.physics.arcade.overlap(frog, enemies, hurtFrog, null, this);
         this.physics.arcade.overlap(enemies, weaponsGroup.children, hurtEnemy, null, this);
         
-        if (frog.body.onFloor() && frog.falling) {
+        if (frog.locked) {
+            if (frog.body.right < frog.lockedTo.body.x || frog.body.x > frog.lockedTo.body.right) {
+                frog.cancelLock();
+            } else {
+                frog.x += frog.lockedTo.deltaX;
+                frog.y += frog.lockedTo.deltaY;
+            }
+        }
+        
+        if ((frog.body.onFloor() || frog.locked) && frog.falling) {
             frog.falling = false;
             thudSound.play();
         }
@@ -601,10 +653,11 @@ function stage(gs) {
         }
     
         if (spacebar.isDown) {
-            if (frog.body.onFloor() && jumpTimer === 0) {
+            if ((frog.body.onFloor() || frog.locked) && jumpTimer === 0) {
                 // jump is allowed to start
                 jumpTimer = 1;
                 frog.body.velocity.y = -400;
+                frog.cancelLock();
                 jumpSound.play();
             } else if (jumpTimer > 0 && jumpTimer < 31) {
                 // keep jumping higher
@@ -638,7 +691,7 @@ function stage(gs) {
             }
         }
     
-        if (frog.body.velocity.y > 0) {
+        if (frog.body.velocity.y > 0 && !frog.locked) {
             frog.falling = true;
         }
         

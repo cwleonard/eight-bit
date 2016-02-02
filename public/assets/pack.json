@@ -21,6 +21,20 @@
         },
         {
             "type": "image",
+            "key": "cloud-blue",
+            "url": "assets/sprites/blue-cloud-platform.png",
+            "frameWidth": 96,
+            "frameHeight": 32
+        },
+        {
+            "type": "image",
+            "key": "cloud-white",
+            "url": "assets/sprites/white-cloud-platform.png",
+            "frameWidth": 96,
+            "frameHeight": 32
+        },
+        {
+            "type": "image",
             "key": "glasses",
             "url": "assets/images/glasses.png"
         },
