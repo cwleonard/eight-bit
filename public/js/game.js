@@ -1,16 +1,36 @@
 
 var init = function () {
 	
-    var levelOne = {
-            map: "LevelSandbox",
-            music: "Ouroboros"
-    };
-    
-    var levelTwo = {
+    var levelOne = { // Vector Factory
             map: "Level1",
-            music: "DangerStorm"
+            music: "assets/audio/Ouroboros.mp3",
+            background: "#141414"
     };
     
+    var levelTwo = { // Binomial Forest
+            map: "Level2",
+            music: "assets/audio/Club_Diver.mp3",
+            background: "#000066"
+    };
+
+    var levelThree = { // Silicon Dioxide Valley
+            map: "Level3",
+            music: "assets/audio/Killing_Time.mp3",
+            background: "#D3EEFF"
+    };
+
+    var levelFour = {
+            map: "Level4",
+            music: "assets/audio/Danger_Storm.mp3",
+            background: "#D3EEFF"
+    };
+
+    var levelFive = {
+            map: "Level5",
+            music: "assets/audio/Latin_Industries.mp3",
+            background: "#D3EEFF"
+    };
+
     var gameState = {
             levels: [],
             currentLevel: "sb",
@@ -20,6 +40,9 @@ var init = function () {
     
     gameState.levels[0] = levelOne;
     gameState.levels[1] = levelTwo;
+    gameState.levels[2] = levelThree;
+    gameState.levels[3] = levelFour;
+    gameState.levels[4] = levelFive;
     
     var theStage = stage(gameState);
     var stageSelectState = selectStage(gameState);

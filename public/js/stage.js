@@ -11,6 +11,7 @@ function stage(gs) {
     var layer;
     var enemies;
     var platforms;
+    var fallingPlatforms;
     var weapons;
     var weaponsGroup;
     var weaponIndex = 0;
@@ -430,32 +431,62 @@ function stage(gs) {
         }
         
     }
-    
+
+    function fallPlatformSep(s, platform) {
+
+        if (!s.locked) {
+            s.lockTo(platform);
+        }
+
+        if (!platform.activated) {
+            platform.activated = true;
+            platform.game.time.events.add(1000, function() {
+//                platform.body.allowGravity = true;
+                var t = platform.game.add.tween(platform.position);
+                var dist = ((platform.game.world.height + 100) - platform.y);
+                var time = dist * 2.50;
+                t.to( { y: platform.position.y + dist }, time, Phaser.Easing.Linear.None, true, 0, 0, false);
+            }, this);
+            
+            
+            
+        }
+        
+    }
+
     // --------------------------------------
     
     
     function preload() {
+        
         this.load.pack("main", "assets/pack.json");
+        
+        this.load.audio("bgmusic", [gameState.levels[gameState.currentLevel].music]);
+        
+        //musicFile = gameState.levels[gameState.currentLevel].music;
+        
     }
     
     function create() {
         
         mapKey = gameState.levels[gameState.currentLevel].map;
-        musicKey = gameState.levels[gameState.currentLevel].music;
+        musicKey = "bgmusic";
         
         this.physics.startSystem(Phaser.Physics.ARCADE);
         this.physics.arcade.checkCollision.down = false;
     
         this.physics.arcade.gravity.y = 1500;
     
-        this.stage.backgroundColor = "#D3EEFF";
+        this.stage.backgroundColor = gameState.levels[gameState.currentLevel].background;
     
         var map = this.add.tilemap(mapKey);
         map.addTilesetImage("ground", "tiles");
     
         var bglayer = map.createLayer("bg");
         bglayer.scrollFactorX = 0.5;
-    
+
+        var layer2 = map.createLayer("layer2");
+
         layer = map.createLayer("layer1");
         layer.resizeWorld();
     
@@ -471,18 +502,32 @@ function stage(gs) {
             p.body.immovable = true;
             
             var t = this.add.tween(p.position);
+            var dist = (p.distance ? Number(p.distance) : 128);
             if (p.direction == "left") {
-                t.to( { x: p.position.x - 200 }, 3000, Phaser.Easing.Linear.None, true, 0, -1, true);
+                t.to( { x: p.position.x - dist }, 3000, Phaser.Easing.Linear.None, true, 0, -1, true);
             } else if (p.direction == "right") {
-                t.to( { x: p.position.x + 200 }, 3000, Phaser.Easing.Linear.None, true, 0, -1, true);
+                t.to( { x: p.position.x + dist }, 3000, Phaser.Easing.Linear.None, true, 0, -1, true);
             } else if (p.direction == "up") {
-                t.to( { y: p.position.y - 200 }, 3000, Phaser.Easing.Linear.None, true, 0, -1, true);
+                t.to( { y: p.position.y - dist }, 3000, Phaser.Easing.Linear.None, true, 0, -1, true);
             } else if (p.direction == "down") {
-                t.to( { y: p.position.y + 200 }, 3000, Phaser.Easing.Linear.None, true, 0, -1, true);
+                t.to( { y: p.position.y + dist }, 3000, Phaser.Easing.Linear.None, true, 0, -1, true);
             }
             
         }, this);
         
+        //6575
+        fallingPlatforms = this.add.group();
+        fallingPlatforms.enableBody = true;
+        map.createFromObjects('others', 6575, 'falling-platform-red', 0, true, false, fallingPlatforms);
+        fallingPlatforms.forEach(function(p) {
+            
+            this.physics.enable(p, Phaser.Physics.ARCADE);
+            p.body.allowGravity = false;
+            p.body.immovable = true;
+            
+            
+        }, this);
+
         
         
         enemies = this.add.group();
@@ -522,6 +567,35 @@ function stage(gs) {
         map.setCollisionBetween(245, 268);
         map.setCollisionBetween(335, 358);
 
+        
+        map.setCollisionBetween(1529, 1536);
+        map.setCollisionBetween(1619, 1626);
+        map.setCollisionBetween(1709, 1716);
+        map.setCollisionBetween(1799, 1806);
+        map.setCollisionBetween(1889, 1896);
+        map.setCollisionBetween(1979, 1986);
+        map.setCollisionBetween(2069, 2076);
+        map.setCollisionBetween(2159, 2166);
+
+
+        for (var u = 17; u < 6423; u += 90) {
+            map.setCollisionBetween(u, (u+17));
+        }
+
+        for (var u = 34; u < 4564; u += 90) {
+            map.setCollisionBetween(u, (u+29));
+        }
+
+//        for (var u = 0; u < 36; u++) {
+//            var temp = (u * 90) + 17;
+//            map.setCollisionBetween(temp, (temp+71));
+//        }
+
+        for (var u = 2339; u < 5579; u += 90) {
+            map.setCollisionBetween(u, (u+13));
+        }
+
+        
         // clouds/water
         map.setCollisionBetween(5669, 6483);
         
@@ -609,6 +683,7 @@ function stage(gs) {
             'four' : Phaser.KeyCode.FOUR
         });
         
+        
         bgmusic = this.sound.add(musicKey);
         bgmusic.volume = 0.3;
         bgmusic.loop = true;
@@ -631,6 +706,7 @@ function stage(gs) {
         this.physics.arcade.collide(frog, layer);
         this.physics.arcade.collide(enemies, layer);
         this.physics.arcade.collide(frog, platforms, platformSep, null, this);
+        this.physics.arcade.collide(frog, fallingPlatforms, fallPlatformSep, null, this);
         this.physics.arcade.overlap(frog, enemies, hurtFrog, null, this);
         this.physics.arcade.overlap(enemies, weaponsGroup.children, hurtEnemy, null, this);
         

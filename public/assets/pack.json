@@ -35,6 +35,13 @@
         },
         {
             "type": "image",
+            "key": "falling-platform-red",
+            "url": "assets/sprites/red-falling-platform.png",
+            "frameWidth": 96,
+            "frameHeight": 32
+        },
+        {
+            "type": "image",
             "key": "glasses",
             "url": "assets/images/glasses.png"
         },
@@ -82,16 +89,6 @@
         },
         {
             "type": "audio",
-            "key": "DangerStorm",
-            "urls": ["assets/audio/Danger_Storm.mp3"]
-        },
-        {
-            "type": "audio",
-            "key": "Ouroboros",
-            "urls": ["assets/audio/Ouroboros.mp3"]
-        },
-        {
-            "type": "audio",
             "key": "jump",
             "urls": ["assets/audio/146726__fins__jumping.mp3"]
         },
@@ -112,14 +109,35 @@
         },
         {
             "type": "tilemap",
-            "key": "LevelSandbox",
+            "key": "Level1",
+            "url": "assets/level1.json",
+            "data": null,
+            "format": "TILED_JSON"
+        },
+        {
+            "type": "tilemap",
+            "key": "Level2",
+            "url": "assets/level2.json",
+            "data": null,
+            "format": "TILED_JSON"
+        },
+        {
+            "type": "tilemap",
+            "key": "Level3",
+            "url": "assets/level3.json",
+            "data": null,
+            "format": "TILED_JSON"
+        },
+        {
+            "type": "tilemap",
+            "key": "Level4",
             "url": "assets/stage0.json",
             "data": null,
             "format": "TILED_JSON"
         },
         {
             "type": "tilemap",
-            "key": "Level1",
+            "key": "Level5",
             "url": "assets/stage1.json",
             "data": null,
             "format": "TILED_JSON"
