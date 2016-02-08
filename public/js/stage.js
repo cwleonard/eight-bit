@@ -432,27 +432,34 @@ function stage(gs) {
         
     }
 
-    function fallPlatformSep(s, platform) {
-
-        if (!s.locked) {
-            s.lockTo(platform);
-        }
-
-        if (!platform.activated) {
-            platform.activated = true;
-            platform.game.time.events.add(1000, function() {
-//                platform.body.allowGravity = true;
-                var t = platform.game.add.tween(platform.position);
-                var dist = ((platform.game.world.height + 100) - platform.y);
-                var time = dist * 2.50;
-                t.to( { y: platform.position.y + dist }, time, Phaser.Easing.Linear.None, true, 0, 0, false);
-            }, this);
-            
-            
-            
-        }
-        
-    }
+	function fallPlatformSep(s, platform) {
+	
+	    if (!s.locked) {
+	        s.lockTo(platform);
+	    }
+	
+	    if (!platform.activated) {
+	        platform.activated = true;
+	        var origY = platform.position.y;
+	        platform.game.time.events.add(1000, function() {
+	            var t = platform.game.add.tween(platform.position);
+	            var dist = ((platform.game.world.height + 100) - platform.y);
+	            var time = dist * 2.25;
+	            t.to( { y: platform.position.y + dist }, time, Phaser.Easing.Quadratic.In, false, 0, 0, false);
+	            t.onComplete.add(function() {
+	                platform.game.time.events.add(2000, function() {
+	                	platform.activated = false;
+	                	platform.position.y = origY;
+	                	var t2 = platform.game.add.tween(platform);
+	                	t2.to({ alpha: 0.5 }, 100, Phaser.Easing.Linear.None, true, 0, 3, true);
+	                });
+	            });
+	            t.start();
+	        }, this);
+	        
+	    }
+	    
+	}
 
     // --------------------------------------
     
@@ -710,15 +717,6 @@ function stage(gs) {
         this.physics.arcade.overlap(frog, enemies, hurtFrog, null, this);
         this.physics.arcade.overlap(enemies, weaponsGroup.children, hurtEnemy, null, this);
         
-        if (frog.locked) {
-            if (frog.body.right < frog.lockedTo.body.x || frog.body.x > frog.lockedTo.body.right) {
-                frog.cancelLock();
-            } else {
-                frog.x += frog.lockedTo.deltaX;
-                frog.y += frog.lockedTo.deltaY;
-            }
-        }
-        
         if ((frog.body.onFloor() || frog.locked) && frog.falling) {
             frog.falling = false;
             thudSound.play();
@@ -781,6 +779,19 @@ function stage(gs) {
     
     }
     
+    function preRender() {
+    	
+        if (frog.locked) {
+            if (frog.body.right < frog.lockedTo.body.x || frog.body.x > frog.lockedTo.body.right) {
+                frog.cancelLock();
+            } else {
+                frog.x += frog.lockedTo.deltaX;
+                frog.y += frog.lockedTo.deltaY;
+            }
+        }
+
+    }
+    
     function render() {
         
         // un-comment to see the boxes
@@ -792,6 +803,7 @@ function stage(gs) {
         preload: preload,
         create: create,
         update: update,
+        preRender: preRender,
         render: render
     };
     
