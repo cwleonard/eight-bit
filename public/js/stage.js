@@ -171,7 +171,6 @@ function stage(gs) {
         game.physics.enable(f, Phaser.Physics.ARCADE);
         f.name = "frog";
         f.body.setSize(60, 25, 0, 38);
-        f.body.linearDamping = 1;
         f.body.collideWorldBounds = true;
         f.checkWorldBounds = true;
         f.outOfBoundsKill = true;
@@ -481,7 +480,7 @@ function stage(gs) {
         
         this.physics.startSystem(Phaser.Physics.ARCADE);
         this.physics.arcade.checkCollision.down = false;
-    
+        this.physics.arcade.TILE_BIAS = 32;
         this.physics.arcade.gravity.y = 1500;
     
         this.stage.backgroundColor = gameState.levels[gameState.currentLevel].background;
