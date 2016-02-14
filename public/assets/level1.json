@@ -72,26 +72,11 @@
         }, 
         {
          "firstgid":6571,
-         "image":"sprites\/toad.png",
-         "imageheight":64,
-         "imagewidth":138,
-         "margin":0,
-         "name":"enemies",
-         "properties":
-            {
-
-            },
-         "spacing":0,
-         "tileheight":64,
-         "tilewidth":64
-        }, 
-        {
-         "firstgid":6573,
-         "image":"sprites\/blue-cloud-platform.png",
-         "imageheight":32,
+         "image":"sprites\/platforms.png",
+         "imageheight":96,
          "imagewidth":96,
          "margin":0,
-         "name":"blue-cloud-platform",
+         "name":"platforms",
          "properties":
             {
 
@@ -102,18 +87,18 @@
         }, 
         {
          "firstgid":6574,
-         "image":"sprites\/white-cloud-platform.png",
-         "imageheight":32,
-         "imagewidth":96,
+         "image":"sprites\/enemies.png",
+         "imageheight":70,
+         "imagewidth":140,
          "margin":0,
-         "name":"white-cloud-platform",
+         "name":"enemies",
          "properties":
             {
 
             },
          "spacing":0,
-         "tileheight":32,
-         "tilewidth":96
+         "tileheight":70,
+         "tilewidth":70
         }],
  "tilewidth":32,
  "version":1,

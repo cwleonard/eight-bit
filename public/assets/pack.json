@@ -54,6 +54,13 @@
         },
         {
             "type": "spritesheet",
+            "key": "rabbit",
+            "url": "assets/sprites/rabbit1.png",
+            "frameWidth": 70,
+            "frameHeight": 70
+        },
+        {
+            "type": "spritesheet",
             "key": "dinosaur",
             "url": "assets/sprites/dinosaur-frames.png",
             "frameWidth": 456,

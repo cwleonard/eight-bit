@@ -297,6 +297,50 @@ function stage(gs) {
     
     }
 
+    // any object that should be a rabbit
+    function setupRabbit(game, obj) {
+    
+        game.physics.enable(obj, Phaser.Physics.ARCADE);
+        //obj.body.setSize(60, 25, 0, 38);
+        obj.health = 60;
+        obj.anchor.setTo(0.5, 0);
+        obj.jumping = false;
+        obj.activated = false;
+    
+        obj.jump = function() {
+        	
+        	var dir = (this.position.x < frog.position.x ? 1 : -1);
+        	
+        	this.scale.x = -dir;
+            this.frame = 1;
+            this.body.velocity.y = -650;
+            this.body.velocity.x = 200 * dir;
+            this.jumping = true;
+        };
+    
+        obj.update = function() {
+        	
+            if (this.body.onFloor() && this.jumping) {
+                this.jumping = false;
+                this.body.velocity.x = 0;
+                this.frame = 0;
+                game.time.events.add(2500, function() {
+                    this.jump();
+                }, this);
+            }
+
+        	if (!this.activated && Math.abs(this.position.x - frog.position.x) < 200) {
+        		this.activated = true;
+        		game.time.events.add(100, function() {
+                    this.jump();
+                }, this);
+        	}
+    
+
+        };
+    
+    }
+
     // any object that should be a dinosaur (boss)
     function setupDino(game, obj) {
     
@@ -498,9 +542,13 @@ function stage(gs) {
     
         map.setLayer(layer);
         
+        var CLOUD1_ID = 6571;
+        var CLOAD2_ID = 6572;
+        var FALLING_PLATFORM_ID = 6573;
+        
         platforms = this.add.group();
         platforms.enableBody = true;
-        map.createFromObjects('others', 6573, 'cloud-blue', 0, true, false, platforms);
+        map.createFromObjects('others', CLOUD1_ID, 'cloud-blue', 0, true, false, platforms);
         platforms.forEach(function(p) {
             
             this.physics.enable(p, Phaser.Physics.ARCADE);
@@ -521,10 +569,10 @@ function stage(gs) {
             
         }, this);
         
-        //6575
+        
         fallingPlatforms = this.add.group();
         fallingPlatforms.enableBody = true;
-        map.createFromObjects('others', 6575, 'falling-platform-red', 0, true, false, fallingPlatforms);
+        map.createFromObjects('others', FALLING_PLATFORM_ID, 'falling-platform-red', 0, true, false, fallingPlatforms);
         fallingPlatforms.forEach(function(p) {
             
             this.physics.enable(p, Phaser.Physics.ARCADE);
@@ -539,21 +587,31 @@ function stage(gs) {
         enemies = this.add.group();
         enemies.enableBody = true;
         
+        var TOAD_ID = 6574;
+        var RABBIT_ID = 6575;
+        
+        
         var toads = this.add.group();
-        map.createFromObjects('others', 6571, 'toad', 0, true, false, toads);
+        map.createFromObjects('others', TOAD_ID, 'toad', 0, true, false, toads);
         toads.forEach(function(t) {
             setupToad(this, t);
         }, this);
         
-        
-        var dinos = this.add.group();
-        map.createFromObjects('others', 6574, 'dinosaur', 0, true, false, dinos);
-        dinos.forEach(function(d) {
-            setupDino(this, d);
+        var rabbits = this.add.group();
+        map.createFromObjects('others', RABBIT_ID, 'rabbit', 0, true, false, rabbits);
+        rabbits.forEach(function(r) {
+            setupRabbit(this, r);
         }, this);
         
+//        var dinos = this.add.group();
+//        map.createFromObjects('others', 6574, 'dinosaur', 0, true, false, dinos);
+//        dinos.forEach(function(d) {
+//            setupDino(this, d);
+//        }, this);
+        
         enemies.addMultiple(toads);
-        enemies.addMultiple(dinos);
+        enemies.addMultiple(rabbits);
+//        enemies.addMultiple(dinos);
         
         map.setCollisionBetween(1, 5);
         map.setCollisionBetween(91, 95);

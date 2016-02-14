@@ -40,9 +40,9 @@
          "name":"others",
          "objects":[
                 {
-                 "gid":6575,
+                 "gid":6573,
                  "height":32,
-                 "id":24,
+                 "id":27,
                  "name":"",
                  "properties":
                     {
@@ -56,9 +56,9 @@
                  "y":608
                 }, 
                 {
-                 "gid":6575,
+                 "gid":6573,
                  "height":32,
-                 "id":25,
+                 "id":28,
                  "name":"",
                  "properties":
                     {
@@ -72,9 +72,9 @@
                  "y":576
                 }, 
                 {
-                 "gid":6575,
+                 "gid":6573,
                  "height":32,
-                 "id":26,
+                 "id":29,
                  "name":"",
                  "properties":
                     {
@@ -94,7 +94,7 @@
          "x":0,
          "y":0
         }],
- "nextobjectid":27,
+ "nextobjectid":30,
  "orientation":"orthogonal",
  "properties":
     {
@@ -120,26 +120,11 @@
         }, 
         {
          "firstgid":6571,
-         "image":"sprites\/toad.png",
-         "imageheight":64,
-         "imagewidth":138,
-         "margin":0,
-         "name":"enemies",
-         "properties":
-            {
-
-            },
-         "spacing":0,
-         "tileheight":64,
-         "tilewidth":64
-        }, 
-        {
-         "firstgid":6573,
-         "image":"sprites\/blue-cloud-platform.png",
-         "imageheight":32,
+         "image":"sprites\/platforms.png",
+         "imageheight":96,
          "imagewidth":96,
          "margin":0,
-         "name":"blue-cloud-platform",
+         "name":"platforms",
          "properties":
             {
 
@@ -150,33 +135,18 @@
         }, 
         {
          "firstgid":6574,
-         "image":"sprites\/white-cloud-platform.png",
-         "imageheight":32,
-         "imagewidth":96,
+         "image":"sprites\/enemies.png",
+         "imageheight":70,
+         "imagewidth":140,
          "margin":0,
-         "name":"white-cloud-platform",
+         "name":"enemies",
          "properties":
             {
 
             },
          "spacing":0,
-         "tileheight":32,
-         "tilewidth":96
-        }, 
-        {
-         "firstgid":6575,
-         "image":"sprites\/red-falling-platform.png",
-         "imageheight":32,
-         "imagewidth":96,
-         "margin":0,
-         "name":"red-falling-platform",
-         "properties":
-            {
-
-            },
-         "spacing":0,
-         "tileheight":32,
-         "tilewidth":96
+         "tileheight":70,
+         "tilewidth":70
         }],
  "tilewidth":32,
  "version":1,

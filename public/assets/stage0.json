@@ -26,92 +26,7 @@
          "draworder":"topdown",
          "height":30,
          "name":"others",
-         "objects":[
-                {
-                 "gid":6573,
-                 "height":32,
-                 "id":18,
-                 "name":"",
-                 "properties":
-                    {
-                     "direction":"left",
-                     "distance":"224"
-                    },
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":96,
-                 "x":2336,
-                 "y":448
-                }, 
-                {
-                 "gid":6573,
-                 "height":32,
-                 "id":19,
-                 "name":"",
-                 "properties":
-                    {
-                     "direction":"down",
-                     "distance":"160"
-                    },
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":96,
-                 "x":1920,
-                 "y":288
-                }, 
-                {
-                 "gid":6573,
-                 "height":32,
-                 "id":20,
-                 "name":"",
-                 "properties":
-                    {
-                     "direction":"right",
-                     "distance":"192"
-                    },
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":96,
-                 "x":1888,
-                 "y":704
-                }, 
-                {
-                 "gid":6573,
-                 "height":32,
-                 "id":21,
-                 "name":"",
-                 "properties":
-                    {
-                     "direction":"right",
-                     "distance":"224"
-                    },
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":96,
-                 "x":1600,
-                 "y":448
-                }, 
-                {
-                 "gid":6573,
-                 "height":32,
-                 "id":22,
-                 "name":"",
-                 "properties":
-                    {
-                     "direction":"up",
-                     "distance":"150"
-                    },
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":96,
-                 "x":2624,
-                 "y":288
-                }],
+         "objects":[],
          "opacity":1,
          "type":"objectgroup",
          "visible":true,
@@ -145,26 +60,11 @@
         }, 
         {
          "firstgid":6571,
-         "image":"sprites\/toad.png",
-         "imageheight":64,
-         "imagewidth":138,
-         "margin":0,
-         "name":"enemies",
-         "properties":
-            {
-
-            },
-         "spacing":0,
-         "tileheight":64,
-         "tilewidth":64
-        }, 
-        {
-         "firstgid":6573,
-         "image":"sprites\/blue-cloud-platform.png",
-         "imageheight":32,
+         "image":"sprites\/platforms.png",
+         "imageheight":96,
          "imagewidth":96,
          "margin":0,
-         "name":"blue-cloud-platform",
+         "name":"platforms",
          "properties":
             {
 
@@ -175,18 +75,18 @@
         }, 
         {
          "firstgid":6574,
-         "image":"sprites\/white-cloud-platform.png",
-         "imageheight":32,
-         "imagewidth":96,
+         "image":"sprites\/enemies.png",
+         "imageheight":70,
+         "imagewidth":140,
          "margin":0,
-         "name":"white-cloud-platform",
+         "name":"enemies",
          "properties":
             {
 
             },
          "spacing":0,
-         "tileheight":32,
-         "tilewidth":96
+         "tileheight":70,
+         "tilewidth":70
         }],
  "tilewidth":32,
  "version":1,
