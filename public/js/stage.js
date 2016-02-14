@@ -94,11 +94,13 @@ function stage(gs) {
                 f.body.velocity.x = 200;
             }
             
+//            f.injuryTween.to( { alpha: 0.5 }, 60, Phaser.Easing.Linear.None, true, 0, 2, true);
+            
             var t = this.add.tween(f);
             t.onComplete.add(function() {
                 f.immune = false;
             });
-            t.to( { alpha: 0.5 }, 50, Phaser.Easing.Linear.None, true, 0, 2, true);
+            t.to( { alpha: 0.5 }, 60, Phaser.Easing.Linear.None, true, 0, 2, true);
             
         }
         
@@ -108,15 +110,16 @@ function stage(gs) {
         
         if (!e.immune) {
             e.immune = true;
-            e.alpha = 0.5;
             e.damage(w.power);
             
             w.exists = false;
-            
-            this.time.events.add(200, function() {
+
+            var t = this.add.tween(e);
+            t.onComplete.add(function() {
                 e.immune = false;
-                e.alpha = 1;
-            }, this);
+            });
+            t.to( { alpha: 0.5 }, 50, Phaser.Easing.Linear.None, true, 0, 2, true);
+
         }
         
     }
@@ -177,6 +180,11 @@ function stage(gs) {
         f.falling = false;
         f.immune = false;
         f.health = 100;
+        
+//        f.injuryTween = game.add.tween(f);
+//        f.injuryTween.onComplete.add(function() {
+//            f.immune = false;
+//        });
         
         f.lockTo = function(platform) {
             this.locked = true;
@@ -477,7 +485,7 @@ function stage(gs) {
 
 	function fallPlatformSep(s, platform) {
 	
-	    if (!s.locked) {
+	    if (!s.locked && s.body.touching.down) {
 	        s.lockTo(platform);
 	    }
 	
@@ -487,14 +495,14 @@ function stage(gs) {
 	        platform.game.time.events.add(1000, function() {
 	            var t = platform.game.add.tween(platform.position);
 	            var dist = ((platform.game.world.height + 100) - platform.y);
-	            var time = dist * 2.25;
-	            t.to( { y: platform.position.y + dist }, time, Phaser.Easing.Quadratic.In, false, 0, 0, false);
+	            var frames = dist * 2.25;
+	            t.to( { y: platform.position.y + dist }, frames, Phaser.Easing.Quadratic.In, false, 0, 0, false);
 	            t.onComplete.add(function() {
 	                platform.game.time.events.add(2000, function() {
 	                	platform.activated = false;
 	                	platform.position.y = origY;
 	                	var t2 = platform.game.add.tween(platform);
-	                	t2.to({ alpha: 0.5 }, 100, Phaser.Easing.Linear.None, true, 0, 3, true);
+	                	t2.to({ alpha: 0.5 }, 150, Phaser.Easing.Linear.None, true, 0, 3, true);
 	                });
 	            });
 	            t.start();
@@ -526,6 +534,8 @@ function stage(gs) {
         this.physics.arcade.checkCollision.down = false;
         this.physics.arcade.TILE_BIAS = 32;
         this.physics.arcade.gravity.y = 1500;
+        
+        this.tweens.frameBased = true;
     
         this.stage.backgroundColor = gameState.levels[gameState.currentLevel].background;
     
