@@ -794,17 +794,22 @@ function stage(gs) {
         }
     
         if (spacebar.isDown) {
+        
             if ((frog.body.onFloor() || frog.locked) && jumpTimer === 0) {
                 // jump is allowed to start
                 jumpTimer = 1;
                 frog.body.velocity.y = -400;
                 frog.cancelLock();
                 jumpSound.play();
-            } else if (jumpTimer > 0 && jumpTimer < 31) {
+            } else if (jumpTimer > 0 && jumpTimer < 31 && !frog.body.blocked.up) {
                 // keep jumping higher
                 jumpTimer++;
                 frog.body.velocity.y = -400 + (jumpTimer * 7);
+            } else if (frog.body.blocked.up) {
+                // permanently end this jump
+                jumpTimer = 999;
             }
+        
         } else {
             // jump button not being pressed, reset jump timer
             jumpTimer = 0;
