@@ -477,7 +477,7 @@ function stage(gs) {
 
     function platformSep(s, platform) {
         
-        if (!s.locked) {
+        if (!s.locked && s.body.touching.down) {
             s.lockTo(platform);
         }
         
@@ -660,6 +660,10 @@ function stage(gs) {
             map.setCollisionBetween(u, (u+29));
         }
 
+        for (var u = 65; u < 4846; u += 90) {
+            map.setCollisionBetween(u, (u+29));
+        }
+
 //        for (var u = 0; u < 36; u++) {
 //            var temp = (u * 90) + 17;
 //            map.setCollisionBetween(temp, (temp+71));
@@ -801,15 +805,15 @@ function stage(gs) {
                 frog.body.velocity.y = -400;
                 frog.cancelLock();
                 jumpSound.play();
-            } else if (jumpTimer > 0 && jumpTimer < 31 && !frog.body.blocked.up) {
+            } else if (jumpTimer > 0 && jumpTimer < 31 && !frog.body.blocked.up && !frog.body.touching.up) {
                 // keep jumping higher
                 jumpTimer++;
                 frog.body.velocity.y = -400 + (jumpTimer * 7);
-            } else if (frog.body.blocked.up) {
+            } else if (frog.body.blocked.up || frog.body.touching.up) {
                 // permanently end this jump
                 jumpTimer = 999;
             }
-        
+            
         } else {
             // jump button not being pressed, reset jump timer
             jumpTimer = 0;

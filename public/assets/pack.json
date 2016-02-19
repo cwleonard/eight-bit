@@ -148,6 +148,13 @@
             "url": "assets/stage1.json",
             "data": null,
             "format": "TILED_JSON"
+        },
+        {
+            "type": "tilemap",
+            "key": "Level6",
+            "url": "assets/level6.json",
+            "data": null,
+            "format": "TILED_JSON"
         }
     ]
 }

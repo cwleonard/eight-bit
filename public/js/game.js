@@ -20,15 +20,21 @@ var init = function () {
     };
 
     var levelFour = {
-            map: "Level4",
+            map: "Level4", // Cloud computing
             music: "assets/audio/Danger_Storm.mp3",
             background: "#D3EEFF"
     };
 
     var levelFive = {
-            map: "Level5",
+            map: "Level5", // Containers
             music: "assets/audio/Latin_Industries.mp3",
             background: "#D3EEFF"
+    };
+
+    var levelSix = {
+            map: "Level6", // Deployment Pipeline
+            music: "assets/audio/Latin_Industries.mp3",
+            background: "#141414"
     };
 
     var gameState = {
@@ -43,6 +49,7 @@ var init = function () {
     gameState.levels[2] = levelThree;
     gameState.levels[3] = levelFour;
     gameState.levels[4] = levelFive;
+    gameState.levels[5] = levelSix;
     
     var theStage = stage(gameState);
     var stageSelectState = selectStage(gameState);
