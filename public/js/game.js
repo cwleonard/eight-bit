@@ -4,37 +4,43 @@ var init = function () {
     var levelOne = { // Vector Factory
             map: "Level1",
             music: "assets/audio/Ouroboros.mp3",
-            background: "#141414"
+            background: "#141414",
+            boss: beaver
     };
     
-    var levelTwo = { // Binomial Forest
+    var levelTwo = { // Binary Trees
             map: "Level2",
             music: "assets/audio/Club_Diver.mp3",
-            background: "#000066"
+            background: "#000066",
+            boss: beaver
     };
 
     var levelThree = { // Silicon Dioxide Valley
             map: "Level3",
             music: "assets/audio/Killing_Time.mp3",
-            background: "#D3EEFF"
+            background: "#D3EEFF",
+            boss: beaver
     };
 
     var levelFour = {
-            map: "Level4", // Cloud computing
+            map: "Level4", // Cloud Computing
             music: "assets/audio/Danger_Storm.mp3",
-            background: "#D3EEFF"
+            background: "#D3EEFF",
+            boss: beaver
     };
 
     var levelFive = {
             map: "Level5", // Containers
             music: "assets/audio/Latin_Industries.mp3",
-            background: "#D3EEFF"
+            background: "#D3EEFF",
+            boss: beaver
     };
 
     var levelSix = {
             map: "Level6", // Deployment Pipeline
-            music: "assets/audio/Latin_Industries.mp3",
-            background: "#141414"
+            music: "assets/audio/Misuse.mp3",
+            background: "#141414",
+            boss: beaver
     };
 
     var gameState = {

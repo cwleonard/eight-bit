@@ -82,28 +82,7 @@ function stage(gs) {
     
     
     function hurtFrog(f, e) {
-        
-        if (!f.immune) {
-            f.animations.stop(null, true);
-            f.frame = 3;
-            f.immune = true;
-            f.damage(10);
-            if (f.body.position.x < e.body.position.x) {
-                f.body.velocity.x = -200;
-            } else {
-                f.body.velocity.x = 200;
-            }
-            
-//            f.injuryTween.to( { alpha: 0.5 }, 60, Phaser.Easing.Linear.None, true, 0, 2, true);
-            
-            var t = this.add.tween(f);
-            t.onComplete.add(function() {
-                f.immune = false;
-            });
-            t.to( { alpha: 0.5 }, 60, Phaser.Easing.Linear.None, true, 0, 2, true);
-            
-        }
-        
+        f.hurt(e);
     }
 
     function hurtEnemy(e, w) {
@@ -195,7 +174,74 @@ function stage(gs) {
         f.cancelLock = function() {
             this.locked = false;
             this.lockedTo = null;
-        }
+        };
+        
+        f.update = function() {
+
+            // is the frog currently falling?
+            if (frog.body.velocity.y > 0 && !frog.locked) {
+                frog.falling = true;
+            }
+            
+            // set the correct frame and/or animation
+            if (this.body.velocity.y === 0 || this.locked) {
+                
+                if (this.body.velocity.x === 0) {
+        
+                    // no animation, the frog is still
+                    this.animations.stop(null, true);
+        
+                } else if (!this.immune) {
+        
+                    if (this.body.velocity.x > 0) {
+                        this.scale.x = 1;
+                    } else if (this.body.velocity.x < 0) {
+                        this.scale.x = -1;
+                    }
+                    this.animations.play("run");
+        
+                }
+        
+            } else if (!this.immune) {
+        
+                // no animation, use a fixed frame
+                this.animations.stop(null, true);
+                
+                if (this.body.velocity.y < 0) {
+                    this.frame = 1;
+                } else if (f.body.velocity.y > 0) {
+                    this.frame = 2;
+                }
+        
+            }
+            
+        };
+        
+        f.hurt = function(enemy) {
+            
+            if (!this.immune) {
+                this.animations.stop(null, true);
+                this.frame = 3;
+                this.immune = true;
+                this.damage(10);
+                if (this.body.position.x < enemy.body.position.x) {
+                    this.body.velocity.x = -200;
+                } else {
+                    this.body.velocity.x = 200;
+                }
+                
+//                f.injuryTween.to( { alpha: 0.5 }, 60, Phaser.Easing.Linear.None, true, 0, 2, true);
+                
+                var t = this.game.add.tween(this);
+                t.onComplete.add(function() {
+                    f.immune = false;
+                });
+                t.to( { alpha: 0.5 }, 60, Phaser.Easing.Linear.None, true, 0, 2, true);
+                
+            }
+            
+            
+        };
         
         f.animations.add("run", [0, 1, 2], 10, true);
         
@@ -349,131 +395,7 @@ function stage(gs) {
     
     }
 
-    // any object that should be a dinosaur (boss)
-    function setupDino(game, obj) {
     
-        obj.roarSound = game.sound.add("roar");
-        
-        obj.tailTosser = game.add.emitter(0, 0, 5);
-        obj.tailTosser.makeParticles('dino-plate', 0, 5, true);
-        obj.tailTosser.gravity = 30;
-        obj.tailTosser.maxParticleSpeed.x = -700;
-        obj.tailTosser.minParticleSpeed.x = -400;
-        obj.tailTosser.maxParticleSpeed.y = -500;
-        obj.tailTosser.minParticleSpeed.y = -300;
-        
-        game.physics.enable(obj, Phaser.Physics.ARCADE);
-        
-        obj.anchor.setTo(0.5, 0);
-        obj.body.collideWorldBounds = true;
-        //obj.body.setSize(60, 25, 0, 38);
-        obj.health = 150;
-        obj.startingX = obj.position.x + 96;
-        obj.walkDir = 1;
-        obj.screaming = false;
-        obj.attacking = false;
-        obj.active = false;
-        obj.immunue = true;
-        
-        obj.events.onKilled.add(function() {
-            gameState.stagesComplete[gameState.currentLevel] = true;
-            bgmusic.stop();
-            game.state.start("stageSelect");            
-        });
-    
-        obj.animations.add("walk", [2, 3], 3, true);
-        //obj.animations.play("walk");
-
-        obj.turnAround = function() {
-            this.walkDir = -this.walkDir;
-            this.scream();
-        };
-        
-        obj.scream = function() {
-            this.immune = false;
-            this.roarSound.play();
-            this.body.velocity.x = 0;
-            this.screaming = true;
-            this.animations.stop();
-            this.frame = 1;
-            game.time.events.add(1000, function() {
-                this.screaming = false;
-                this.attack();
-            }, this);
-        };
-
-        obj.attack = function() {
-            this.body.velocity.x = 0;
-            this.attacking = true;
-            this.animations.stop();
-            this.frame = 4;
-            this.tailTosser.x = this.position.x + 100;
-            this.tailTosser.y = this.position.y;
-            this.tailTosser.start(true, 2000, null, 5);
-            game.time.events.add(1000, function() {
-                this.attacking = false;
-                obj.animations.play("walk");
-            }, this);
-        };
-
-        obj.update = function() {
-            
-            if (!this.active && Math.abs(Math.abs(frog.position.x) - Math.abs(this.position.x)) < 600) {
-                this.active = true;
-                this.scream();
-            }
-            
-            if (!this.active) return;
-            
-            if (!this.screaming) this.immune = true;
-            
-            game.physics.arcade.overlap(frog, this.tailTosser, hurtFrog, null, game);
-            if (this.walkDir == 1 && this.position.x < (this.startingX - 500)) {
-                this.turnAround();
-            } else if (this.walkDir == -1 && this.position.x >= this.startingX) {
-                this.turnAround();
-            }
-            if (!this.screaming && !this.attacking) {
-                this.body.velocity.x = -100 * (this.walkDir);
-            }
-        };
-        
-    }
-
-    function setAnimation(f) {
-    
-        if (f.body.velocity.y === 0 || f.locked) {
-    
-            if (f.body.velocity.x === 0) {
-    
-                // no animation, the frog is still
-                f.animations.stop(null, true);
-    
-            } else if (!f.immune) {
-    
-                if (f.body.velocity.x > 0) {
-                    f.scale.x = 1;
-                } else if (f.body.velocity.x < 0) {
-                    f.scale.x = -1;
-                }
-                f.animations.play("run");
-    
-            }
-    
-        } else if (!f.immune) {
-    
-            // no animation, use a fixed frame
-            f.animations.stop(null, true);
-            
-            if (f.body.velocity.y < 0) {
-                f.frame = 1;
-            } else if (f.body.velocity.y > 0) {
-                f.frame = 2;
-            }
-    
-        }
-    
-    }
 
     function platformSep(s, platform) {
         
@@ -518,10 +440,7 @@ function stage(gs) {
     function preload() {
         
         this.load.pack("main", "assets/pack.json");
-        
         this.load.audio("bgmusic", [gameState.levels[gameState.currentLevel].music]);
-        
-        //musicFile = gameState.levels[gameState.currentLevel].music;
         
     }
     
@@ -567,13 +486,13 @@ function stage(gs) {
             
             var t = this.add.tween(p.position);
             var dist = (p.distance ? Number(p.distance) : 128);
-            if (p.direction == "left") {
+            if (p.direction === "left") {
                 t.to( { x: p.position.x - dist }, 3000, Phaser.Easing.Linear.None, true, 0, -1, true);
-            } else if (p.direction == "right") {
+            } else if (p.direction === "right") {
                 t.to( { x: p.position.x + dist }, 3000, Phaser.Easing.Linear.None, true, 0, -1, true);
-            } else if (p.direction == "up") {
+            } else if (p.direction === "up") {
                 t.to( { y: p.position.y - dist }, 3000, Phaser.Easing.Linear.None, true, 0, -1, true);
-            } else if (p.direction == "down") {
+            } else if (p.direction === "down") {
                 t.to( { y: p.position.y + dist }, 3000, Phaser.Easing.Linear.None, true, 0, -1, true);
             }
             
@@ -613,15 +532,11 @@ function stage(gs) {
             setupRabbit(this, r);
         }, this);
         
-//        var dinos = this.add.group();
-//        map.createFromObjects('others', 6574, 'dinosaur', 0, true, false, dinos);
-//        dinos.forEach(function(d) {
-//            setupDino(this, d);
-//        }, this);
         
         enemies.addMultiple(toads);
         enemies.addMultiple(rabbits);
-//        enemies.addMultiple(dinos);
+        
+
         
         map.setCollisionBetween(1, 5);
         map.setCollisionBetween(91, 95);
@@ -636,21 +551,12 @@ function stage(gs) {
         map.setCollisionBetween(3690, 3701);
         map.setCollisionBetween(3781, 3791);
 
-        map.setCollisionBetween(65, 88);
-        map.setCollisionBetween(155, 178);
-        map.setCollisionBetween(245, 268);
-        map.setCollisionBetween(335, 358);
+//        map.setCollisionBetween(65, 88);
+//        map.setCollisionBetween(155, 178);
+//        map.setCollisionBetween(245, 268);
+//        map.setCollisionBetween(335, 358);
 
         
-        map.setCollisionBetween(1529, 1536);
-        map.setCollisionBetween(1619, 1626);
-        map.setCollisionBetween(1709, 1716);
-        map.setCollisionBetween(1799, 1806);
-        map.setCollisionBetween(1889, 1896);
-        map.setCollisionBetween(1979, 1986);
-        map.setCollisionBetween(2069, 2076);
-        map.setCollisionBetween(2159, 2166);
-
 
         for (var u = 17; u < 6423; u += 90) {
             map.setCollisionBetween(u, (u+17));
@@ -664,10 +570,9 @@ function stage(gs) {
             map.setCollisionBetween(u, (u+29));
         }
 
-//        for (var u = 0; u < 36; u++) {
-//            var temp = (u * 90) + 17;
-//            map.setCollisionBetween(temp, (temp+71));
-//        }
+        for (var u = 1529; u < 2166; u += 90) {
+            map.setCollisionBetween(u, (u+8));
+        }
 
         for (var u = 2339; u < 5579; u += 90) {
             map.setCollisionBetween(u, (u+13));
@@ -748,6 +653,19 @@ function stage(gs) {
             weapons[w].sprites = wg;
             weaponsGroup.add(wg);
         }
+        
+        
+        // --------------- set up the boss for this level
+        
+        var theBoss = gameState.levels[gameState.currentLevel].boss(this, enemies, frog);
+        theBoss.events.onKilled.add(function() {
+            gameState.stagesComplete[gameState.currentLevel] = true;
+            bgmusic.stop();
+            this.state.start("stageSelect");
+        }, this);
+        
+        // -------------------------------------------------
+        
         
         this.camera.follow(frog);
     
@@ -840,16 +758,6 @@ function stage(gs) {
                 frog.body.velocity.x = 150;
             }
         }
-    
-        if (frog.body.velocity.y > 0 && !frog.locked) {
-            frog.falling = true;
-        }
-        
-        setAnimation(frog);
-        
-        enemies.forEach(function(t) {
-            t.update();
-        }, this);
         
         updateHealthBar();
     
@@ -857,6 +765,8 @@ function stage(gs) {
     
     function preRender() {
     	
+        if (this.game.paused) return;
+        
         if (frog.locked) {
             if (frog.body.right < frog.lockedTo.body.x || frog.body.x > frog.lockedTo.body.right) {
                 frog.cancelLock();

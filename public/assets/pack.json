@@ -61,6 +61,13 @@
         },
         {
             "type": "spritesheet",
+            "key": "beaver",
+            "url": "assets/sprites/beaver.png",
+            "frameWidth": 150,
+            "frameHeight": 94
+        },
+        {
+            "type": "spritesheet",
             "key": "dinosaur",
             "url": "assets/sprites/dinosaur-frames.png",
             "frameWidth": 456,
