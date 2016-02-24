@@ -74,6 +74,9 @@ function selectStage(gs) {
         } else if (keys.six.isDown) {
             gameState.currentLevel = 5;
             this.state.start("level");
+        } else if (keys.seven.isDown) {
+            gameState.currentLevel = 6;
+            this.state.start("level");
         }
         
     }

@@ -43,6 +43,14 @@ var init = function () {
             boss: beaver
     };
 
+    var levelSeven = {
+            map: "Level7", // Liquid Cooled
+            music: "assets/audio/Cut_and_Run.mp3",
+            background: "#D3EEFF",
+            boss: beaver,
+            water: true
+    };
+
     var gameState = {
             levels: [],
             currentLevel: "sb",
@@ -56,6 +64,7 @@ var init = function () {
     gameState.levels[3] = levelFour;
     gameState.levels[4] = levelFive;
     gameState.levels[5] = levelSix;
+    gameState.levels[6] = levelSeven;
     
     var theStage = stage(gameState);
     var stageSelectState = selectStage(gameState);

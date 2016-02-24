@@ -162,6 +162,13 @@
             "url": "assets/level6.json",
             "data": null,
             "format": "TILED_JSON"
+        },
+        {
+            "type": "tilemap",
+            "key": "Level7",
+            "url": "assets/level7.json",
+            "data": null,
+            "format": "TILED_JSON"
         }
     ]
 }

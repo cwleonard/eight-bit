@@ -10,7 +10,6 @@
 
 function beaver(game, grp, frog) {
 
-
     var obj = game.add.sprite(game.world.width - 150, 100, "beaver", 0, grp);
 
     obj.tailTosser = game.add.emitter(0, 0, 5);

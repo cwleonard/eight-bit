@@ -6,6 +6,8 @@ function stage(gs) {
 	var mapKey;
 	var musicKey;
 	
+	var waterLevel = false;
+	
     var frog;
     var group;
     var layer;
@@ -446,13 +448,20 @@ function stage(gs) {
     
     function create() {
         
+        waterLevel = gameState.levels[gameState.currentLevel].water ? true : false;
+        
         mapKey = gameState.levels[gameState.currentLevel].map;
         musicKey = "bgmusic";
         
         this.physics.startSystem(Phaser.Physics.ARCADE);
         this.physics.arcade.checkCollision.down = false;
         this.physics.arcade.TILE_BIAS = 32;
-        this.physics.arcade.gravity.y = 1500;
+        
+        if (waterLevel) {
+            this.physics.arcade.gravity.y = 250;
+        } else {
+            this.physics.arcade.gravity.y = 1500;
+        }
         
         this.tweens.frameBased = true;
     
@@ -668,6 +677,7 @@ function stage(gs) {
         
         
         this.camera.follow(frog);
+        
     
         cursors = this.input.keyboard.createCursorKeys();
         spacebar = this.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
@@ -715,23 +725,27 @@ function stage(gs) {
             frog.body.velocity.x = 0;
         }
     
-        if (spacebar.isDown) {
+        var xVel = waterLevel ? 100 : 150;
+        var yVel = waterLevel ? -250 : -400;
+        var jumpFrames = waterLevel ? 26 : 31;
         
-            if ((frog.body.onFloor() || frog.locked) && jumpTimer === 0) {
+        if (spacebar.isDown) {
+    
+            if ((frog.body.onFloor() || frog.locked || waterLevel) && jumpTimer === 0) {
                 // jump is allowed to start
                 jumpTimer = 1;
-                frog.body.velocity.y = -400;
+                frog.body.velocity.y = yVel;
                 frog.cancelLock();
                 jumpSound.play();
-            } else if (jumpTimer > 0 && jumpTimer < 31 && !frog.body.blocked.up && !frog.body.touching.up) {
+            } else if (jumpTimer > 0 && jumpTimer < jumpFrames && !frog.body.blocked.up && !frog.body.touching.up) {
                 // keep jumping higher
                 jumpTimer++;
-                frog.body.velocity.y = -400 + (jumpTimer * 7);
+                frog.body.velocity.y = yVel + (jumpTimer * 7);
             } else if (frog.body.blocked.up || frog.body.touching.up) {
                 // permanently end this jump
                 jumpTimer = 999;
             }
-            
+    
         } else {
             // jump button not being pressed, reset jump timer
             jumpTimer = 0;
@@ -751,11 +765,12 @@ function stage(gs) {
             throwSomething(this);
         }
         
+        
         if (!frog.immune) {
             if (cursors.left.isDown) {
-                frog.body.velocity.x = -150;
+                frog.body.velocity.x = -xVel;
             } else if (cursors.right.isDown) {
-                frog.body.velocity.x = 150;
+                frog.body.velocity.x = xVel;
             }
         }
         
