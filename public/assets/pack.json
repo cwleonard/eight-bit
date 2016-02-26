@@ -2,6 +2,16 @@
     "main": [
         {
             "type": "image",
+            "key": "dip_switch",
+            "url": "assets/images/dip_switch.png"
+        },
+        {
+            "type": "image",
+            "key": "title-select",
+            "url": "assets/images/title-select.png"
+        },
+        {
+            "type": "image",
             "key": "tiles",
             "url": "assets/images/nestle2.png"
         },
@@ -115,6 +125,41 @@
             "type": "audio",
             "key": "die",
             "urls": ["assets/audio/219723__b-lamerichs__8.mp3"]
+        },
+        {
+            "type": "audio",
+            "key": "Club_Diver",
+            "urls": ["assets/audio/Club_Diver.mp3"]
+        },
+        {
+            "type": "audio",
+            "key": "Cut_and_Run",
+            "urls": ["assets/audio/Cut_and_Run.mp3"]
+        },
+        {
+            "type": "audio",
+            "key": "Danger_Storm",
+            "urls": ["assets/audio/Danger_Storm.mp3"]
+        },
+        {
+            "type": "audio",
+            "key": "Killing_Time",
+            "urls": ["assets/audio/Killing_Time.mp3"]
+        },
+        {
+            "type": "audio",
+            "key": "Latin_Industries",
+            "urls": ["assets/audio/Latin_Industries.mp3"]
+        },
+        {
+            "type": "audio",
+            "key": "Misuse",
+            "urls": ["assets/audio/Misuse.mp3"]
+        },
+        {
+            "type": "audio",
+            "key": "Ouroboros",
+            "urls": ["assets/audio/Ouroboros.mp3"]
         },
         {
             "type": "audio",

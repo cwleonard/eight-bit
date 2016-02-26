@@ -2,24 +2,23 @@ function selectStage(gs) {
 
     var gameState = gs;
     var keys;
-    var splash;
     
     var OFF_Y = 255;
     var ON_Y = 235;
     
     function preload() {
 
-        this.load.pack("main", "assets/stageSelectPack.json");
-        
     }
     
     function create() {
         
-        this.stage.backgroundColor = "#006600";
+        this.stage.backgroundColor = "#000000";
         
         gameState.lives = 3;
         
-        splash = this.add.image(0, 0, "splash");
+        var splash = this.add.image(0, 0, "title");
+
+        var sel = this.add.image(500, 500, "title-select");
         
         var ds = this.add.image(450, 200, "dip_switch");
 

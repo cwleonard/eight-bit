@@ -441,9 +441,6 @@ function stage(gs) {
     
     function preload() {
         
-        this.load.pack("main", "assets/pack.json");
-        this.load.audio("bgmusic", [gameState.levels[gameState.currentLevel].music]);
-        
     }
     
     function create() {
@@ -451,7 +448,7 @@ function stage(gs) {
         waterLevel = gameState.levels[gameState.currentLevel].water ? true : false;
         
         mapKey = gameState.levels[gameState.currentLevel].map;
-        musicKey = "bgmusic";
+        musicKey = gameState.levels[gameState.currentLevel].music;
         
         this.physics.startSystem(Phaser.Physics.ARCADE);
         this.physics.arcade.checkCollision.down = false;
