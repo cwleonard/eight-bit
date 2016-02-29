@@ -24,6 +24,7 @@ function stage(gs) {
     var bgmusic;
     var jumpSound;
     var thudSound;
+    var swimSound;
     var dieSound;
     
     var cursors;
@@ -208,6 +209,12 @@ function stage(gs) {
         
                 // no animation, use a fixed frame
                 this.animations.stop(null, true);
+
+                if (this.body.velocity.x > 0) {
+                    this.scale.x = 1;
+                } else if (this.body.velocity.x < 0) {
+                    this.scale.x = -1;
+                }
                 
                 if (this.body.velocity.y < 0) {
                     this.frame = 1;
@@ -692,8 +699,9 @@ function stage(gs) {
         bgmusic.loop = true;
         bgmusic.play();
         
-        jumpSound = this.sound.add("jump");
+        jumpSound = (waterLevel ? this.sound.add("swim") : this.sound.add("jump"));
         thudSound = this.sound.add("thud");
+        swimSound = this.sound.add("swim");
         dieSound = this.sound.add("die");
         
         nextFire = this.time.now + FIRE_RATE;

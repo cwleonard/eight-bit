@@ -90,7 +90,7 @@ var init = function () {
             this.loadingText = this.add.image(450, 200, "title-loading");
             
             this.load.pack("main", "assets/pack.json");
-
+    
         },
         
         create: function() {

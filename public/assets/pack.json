@@ -128,6 +128,11 @@
         },
         {
             "type": "audio",
+            "key": "swim",
+            "urls": ["assets/audio/264828__commanderrobot__videogame-jump.mp3"]
+        },
+        {
+            "type": "audio",
             "key": "Club_Diver",
             "urls": ["assets/audio/Club_Diver.mp3"]
         },
