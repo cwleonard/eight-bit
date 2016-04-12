@@ -699,7 +699,7 @@ function stage(gs) {
         bgmusic.loop = true;
         bgmusic.play();
         
-        jumpSound = (waterLevel ? this.sound.add("swim") : this.sound.add("jump"));
+        jumpSound = ((waterLevel && frog.position.y > 96) ? this.sound.add("swim") : this.sound.add("jump"));
         thudSound = this.sound.add("thud");
         swimSound = this.sound.add("swim");
         dieSound = this.sound.add("die");
@@ -729,14 +729,20 @@ function stage(gs) {
         if (!frog.immune) {
             frog.body.velocity.x = 0;
         }
+        
+        if (waterLevel && frog.position.y < 96) {
+            frog.body.gravity.y = 1000;
+        } else {
+            frog.body.gravity.y = 0;
+        }
     
-        var xVel = waterLevel ? 100 : 150;
-        var yVel = waterLevel ? -250 : -400;
-        var jumpFrames = waterLevel ? 26 : 31;
+        var xVel = (waterLevel && frog.position.y > 96) ? 100 : 150;
+        var yVel = (waterLevel && frog.position.y > 96) ? -250 : -400;
+        var jumpFrames = (waterLevel && frog.position.y > 96) ? 26 : 31;
         
         if (spacebar.isDown) {
     
-            if ((frog.body.onFloor() || frog.locked || waterLevel) && jumpTimer === 0) {
+            if ((frog.body.onFloor() || frog.locked || (waterLevel && frog.position.y > 96)) && jumpTimer === 0) {
                 // jump is allowed to start
                 jumpTimer = 1;
                 frog.body.velocity.y = yVel;
