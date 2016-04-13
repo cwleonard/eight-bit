@@ -469,8 +469,9 @@ function stage(gs) {
         
         this.tweens.frameBased = true;
     
-        this.stage.backgroundColor = gameState.levels[gameState.currentLevel].background;
-    
+        var mapData = this.cache.getTilemapData(mapKey).data;
+        this.stage.backgroundColor = mapData.backgroundcolor;
+        
         var map = this.add.tilemap(mapKey);
         map.addTilesetImage("ground", "tiles");
     
@@ -699,7 +700,7 @@ function stage(gs) {
         bgmusic.loop = true;
         bgmusic.play();
         
-        jumpSound = ((waterLevel && frog.position.y > 96) ? this.sound.add("swim") : this.sound.add("jump"));
+        jumpSound = (waterLevel) ? this.sound.add("swim") : this.sound.add("jump");
         thudSound = this.sound.add("thud");
         swimSound = this.sound.add("swim");
         dieSound = this.sound.add("die");
